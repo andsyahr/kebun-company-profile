@@ -23,7 +23,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PAT_TOKEN }}
 
       - uses: docker/build-push-action@v6
         with:
@@ -54,11 +54,13 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           script: |
             set -e
+            # Jaga-jaga: docker via snap tidak masuk PATH shell non-interaktif
+            export PATH="/usr/local/bin:/usr/bin:/bin:/snap/bin:$PATH"
             docker pull ${{ env.IMAGE }}:latest
             docker stop kebun-web 2>/dev/null || true
             docker rm kebun-web 2>/dev/null || true
             docker run -d --name kebun-web --restart unless-stopped \
               -p 127.0.0.1:4321:4321 \
-              --env-file /etc/kebun/kebun.env \
+              --env-file /home/ubuntu/kebun.env \
               ${{ env.IMAGE }}:latest
             docker image prune -f

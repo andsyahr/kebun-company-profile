@@ -24,12 +24,18 @@ Repo → Settings → Secrets and variables → Actions:
 | `SSH_KEY` | private key SSH user tsb. |
 | `PUBLIC_FIREBASE_API_KEY` / `PUBLIC_FIREBASE_AUTH_DOMAIN` / `PUBLIC_FIREBASE_PROJECT_ID` / `PUBLIC_FIREBASE_APP_ID` | web config Firebase (publik by design, ter-inline saat build) |
 
-Setelah push image pertama: buka https://github.com/users/<user>/packages → package repo ini → **Package settings → Change visibility → Public** agar VPS bisa `docker pull` tanpa login.
+**Package GHCR diset private** → VPS perlu autentikasi saat pull. Buat **Personal Access Token (classic)** di GitHub → Settings → Developer settings → Tokens → scope `read:packages` saja. Lalu **sekali di server**, sebagai user SSH yang sama dengan `SSH_USER`:
+
+```bash
+echo "<PAT>" | docker login ghcr.io -u <github-username> --password-stdin
+```
+
+Login tersimpan di `~/.docker/config.json` user tsb. dan dipakai semua pull berikutnya — termasuk yang dijalankan GitHub Actions via SSH. (Alternatif: simpan PAT di GitHub Secrets lalu login di dalam script deploy — lebih ribet, tidak perlu.)
 
 ## Sekali di server — setup awal
 
 1. **Install Docker**: `curl -fsSL https://get.docker.com | sh` lalu `usermod -aG docker <user>`.
-2. **Env runtime** di `/etc/kebun/kebun.env` (`chmod 600`, jangan commit):
+2. **Env runtime** di `/home/ubuntu/kebun.env` (`chmod 600`, jangan commit):
    ```
    AUTH_EMAIL=...
    AUTH_CLIENT_ID=...
@@ -67,7 +73,7 @@ Setelah push image pertama: buka https://github.com/users/<user>/packages → pa
    ```bash
    docker pull ghcr.io/<user>/kebun-company-profile:latest
    docker run -d --name kebun-web --restart unless-stopped \
-     -p 127.0.0.1:4321:4321 --env-file /etc/kebun/kebun.env \
+     -p 127.0.0.1:4321:4321 --env-file /home/ubuntu/kebun.env \
      ghcr.io/<user>/kebun-company-profile:latest
    ```
 5. Verifikasi: `curl -I http://127.0.0.1:4321/` → 200, lalu cek `https://kebun.tech`.
@@ -102,7 +108,7 @@ Catatan: file lama `src/content/news/*.md` tidak lagi dipakai — kontennya bisa
 
 ## Form kontak
 
-`src/pages/api/contact.ts` (nodemailer + Gmail OAuth2) mengirim ke `business@kebun.tech`. **Wajib env runtime** di `/etc/kebun/kebun.env`: `AUTH_EMAIL`, `AUTH_CLIENT_ID`, `AUTH_CLIENT_SECRET`, `AUTH_REFRESH_TOKEN`, `CONTACT_TO`. ⚠️ OAuth app di Google Cloud Console harus berstatus **"In production"** — kalau masih "Testing", refresh token kedaluwarsa tiap 7 hari dan form diam-diam berhenti bekerja.
+`src/pages/api/contact.ts` (nodemailer + Gmail OAuth2) mengirim ke `business@kebun.tech`. **Wajib env runtime** di `/home/ubuntu/kebun.env`: `AUTH_EMAIL`, `AUTH_CLIENT_ID`, `AUTH_CLIENT_SECRET`, `AUTH_REFRESH_TOKEN`, `CONTACT_TO`. ⚠️ OAuth app di Google Cloud Console harus berstatus **"In production"** — kalau masih "Testing", refresh token kedaluwarsa tiap 7 hari dan form diam-diam berhenti bekerja.
 
 ## Cara build lokal
 
