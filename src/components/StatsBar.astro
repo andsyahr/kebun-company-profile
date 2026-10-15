@@ -1,0 +1,43 @@
+---
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+// Angka trust — sumber: track record grup (jangan tambah angka lain tanpa konfirmasi)
+const stats: Record<Lang, { value: string; label: string }[]> = {
+  ja: [
+    { value: '1,000+', label: '送り出し実績（グループ累計）' },
+    { value: '2', label: 'トレーニングセンター（ソロ・ブカシ）' },
+    { value: '3', label: 'トップ大学とのMOU（UGM・UI・IPB）' },
+    { value: '2', label: '拠点国（インドネシア・日本）' },
+  ],
+  id: [
+    { value: '1.000+', label: 'Pekerja ditempatkan di Jepang (grup)' },
+    { value: '2', label: 'Training center (Solo & Bekasi)' },
+    { value: '3', label: 'MOU universitas (UGM, UI, IPB)' },
+    { value: '2', label: 'Negara basis operasi (ID & JP)' },
+  ],
+  en: [
+    { value: '1,000+', label: 'Workers placed in Japan (group)' },
+    { value: '2', label: 'Training centers (Solo & Bekasi)' },
+    { value: '3', label: 'University MOUs (UGM, UI, IPB)' },
+    { value: '2', label: 'Countries of operation (ID & JP)' },
+  ],
+};
+---
+
+<section class="bg-garden-900" aria-label={lang === 'ja' ? '実績' : lang === 'id' ? 'Pencapaian' : 'Track record'}>
+  <div class="container-site grid grid-cols-2 gap-x-4 gap-y-8 py-10 lg:grid-cols-4">
+    {
+      stats[lang].map((stat) => (
+        <div class="text-center">
+          <p class="font-display text-3xl font-extrabold text-white sm:text-4xl">{stat.value}</p>
+          <p class="mt-2 text-xs leading-snug text-garden-200 sm:text-sm">{stat.label}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>

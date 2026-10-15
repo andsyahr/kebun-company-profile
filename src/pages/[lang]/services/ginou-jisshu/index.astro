@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import CTASection from '../../../../components/CTASection.astro';
+import { getStaticLangPaths, type Lang } from '../../../../i18n/ui';
+
+export function getStaticPaths() {
+  return getStaticLangPaths();
+}
+const lang = Astro.params.lang as Lang;
+
+const t = {
+  ja: {
+    meta: {
+      title: '技能実習から育成就労へ｜制度移行対応',
+      description:
+        '技能実習制度は育成就労制度へ移行します。1,000名以上の送り出し実績を持つ当社グループが、新制度の要件に沿った送り出し・教育体制で移行期の受け入れをご支援します。',
+    },
+    eyebrow: 'Service 02',
+    title: '技能実習 → 育成就労',
+    lead: '外国人技能実習制度は、新たな「育成就労制度」へと生まれ変わります。当社グループは技能実習での豊富な送り出し実績を土台に、新制度を見据えた教育・送り出し体制をすでに整えています。',
+    transition: {
+      title: '制度移行のポイント',
+      items: [
+        { title: '「人材確保」と「人材育成」が目的に', body: '技能移転による国際貢献を建前としていた技能実習と異なり、育成就労は人材確保と育成を正面から目的に掲げる制度です。' },
+        { title: '特定技能へつながるキャリアパス', body: '原則3年の育成期間で特定技能1号の水準まで人材を育成する設計となり、長期就労への道筋が明確になります。' },
+        { title: '転籍ルールの変化', body: '一定の条件下で本人意向による転籍が認められる方向です。「選ばれる職場」であることが、これまで以上に重要になります。' },
+        { title: '送り出し機関への規律強化', body: '手数料の透明化など、送り出し側への規律も強化されます。エシカル・リクルートメントを掲げてきた当社には追い風と捉えています。',},
+      ],
+    },
+    support: {
+      title: '当社がご支援できること',
+      items: [
+        '技能実習からの移行期における受け入れ計画の設計支援',
+        '新制度の要件を見据えた出国前教育（日本語・職場文化）',
+        '育成就労から特定技能への移行を見据えた人材育成計画',
+        '監理団体様・受入企業様への最新制度情報の共有',
+      ],
+    },
+    note: '制度の詳細は今後の政省令により確定していく部分があります。当社は最新の公式情報にもとづいてご案内し、不確定な情報での約束はいたしません。',
+    cta: { label: '移行期のご相談（無料）', href: '/ja/contact/' },
+  },
+  id: {
+    meta: {
+      title: 'Magang Teknis (Ginou Jisshu) → Ikusei Shuro',
+      description:
+        'Program magang teknis Jepang sedang berganti menjadi sistem baru Ikusei Shuro yang lebih melindungi pekerja. Pahami perubahannya dan jalur karier barunya bersama PT Kebun Teknologi Indonesia.',
+    },
+    eyebrow: 'Program 02',
+    title: 'Magang Teknis → Ikusei Shuro',
+    lead: 'Kamu mungkin pernah dengar program "magang Jepang" (Ginou Jisshu). Program ini sedang diganti pemerintah Jepang dengan sistem baru bernama Ikusei Shuro — dan perubahan ini kabar baik untuk pekerja Indonesia.',
+    transition: {
+      title: 'Apa yang berubah?',
+      items: [
+        { title: 'Tujuannya jadi lebih jujur', body: 'Sistem baru terang-terangan bertujuan mengembangkan dan mempekerjakan tenaga asing — bukan sekadar "transfer keterampilan". Artinya perlindungan dan haknya lebih jelas.' },
+        { title: 'Ada jalur karier yang jelas', body: 'Ikusei Shuro dirancang sebagai masa pengembangan sekitar 3 tahun untuk naik ke level Tokutei Ginou (SSW) — gajimu ikut naik seiring kariermu.' },
+        { title: 'Lebih mudah pindah kerja', body: 'Dengan syarat tertentu, kamu boleh pindah tempat kerja jika ada masalah — hal yang dulu hampir mustahil di program magang lama.' },
+        { title: 'Biaya lebih transparan', body: 'Aturan baru memperketat lembaga penyalur soal biaya. Kami menyambut ini — transparansi biaya memang sudah jadi prinsip kami sejak awal.' },
+      ],
+    },
+    support: {
+      title: 'Peran kami untukmu',
+      items: [
+        'Menjelaskan dengan jujur program mana yang cocok untukmu saat ini',
+        'Pelatihan bahasa Jepang & budaya kerja di LPK Kebun (Solo & Bekasi)',
+        'Merencanakan jalur kariermu: magang/Ikusei Shuro → SSW → SSW tahap 2',
+        'Pendampingan oleh tim kami di Jepang selama kamu bekerja',
+      ],
+    },
+    note: 'Detail aturan Ikusei Shuro masih difinalisasi pemerintah Jepang. Kami hanya menyampaikan informasi dari sumber resmi — dan tidak akan menjanjikan hal yang belum pasti.',
+    cta: { label: 'Tanya Program via WhatsApp', href: 'https://wa.me/6281903353533' },
+  },
+  en: {
+    meta: {
+      title: 'TITP → Ikusei Shuro Transition',
+      description:
+        'Japan’s Technical Intern Training Program is transitioning to the new Ikusei Shuro system. We support employers and candidates through the transition with compliant sending and training.',
+    },
+    eyebrow: 'Service 02',
+    title: 'TITP → Ikusei Shuro',
+    lead: 'Japan’s Technical Intern Training Program (TITP) is being replaced by the new Ikusei Shuro ("employment for skill development") system. Built on our group’s extensive TITP track record, we are ready for the transition.',
+    transition: {
+      title: 'What changes',
+      items: [
+        { title: 'Honest objectives', body: 'The new system openly aims to secure and develop foreign talent, with clearer worker protections.' },
+        { title: 'Career path to SSW', body: 'A development period of around three years leading to SSW type 1 level — a clear long-term path.' },
+        { title: 'Job mobility', body: 'Workers may change employers under certain conditions, making retention quality matter more.' },
+        { title: 'Stricter rules for senders', body: 'Fee transparency requirements tighten for sending organizations — which matches how we already operate.' },
+      ],
+    },
+    support: {
+      title: 'How we help',
+      items: [
+        'Transition planning for current TITP-receiving employers',
+        'Pre-departure training aligned with the new requirements',
+        'Talent development plans aimed at SSW progression',
+        'Up-to-date regulatory information for supervising organizations',
+      ],
+    },
+    note: 'Some details of the new system are still being finalized. We advise based on official information only and never promise what is not yet certain.',
+    cta: { label: 'Free consultation', href: '/en/contact/' },
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} path="/services/ginou-jisshu/">
+  <section class="bg-garden-900">
+    <div class="container-site py-14 lg:py-18">
+      <p class="eyebrow !text-garden-300">{t.eyebrow}</p>
+      <h1 class="mt-2 max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">{t.title}</h1>
+      <p class="mt-5 max-w-3xl leading-relaxed text-garden-100">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="bg-washi-50">
+    <div class="container-site py-14 lg:py-18">
+      <h2 class="text-center text-2xl font-bold text-garden-900 sm:text-3xl">{t.transition.title}</h2>
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        {
+          t.transition.items.map((item) => (
+            <div class="card">
+              <h3 class="text-lg font-bold text-garden-900">{item.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <p class="mx-auto mt-8 max-w-3xl rounded-xl bg-washi-100 p-4 text-center text-xs leading-relaxed text-ink-600">{t.note}</p>
+    </div>
+  </section>
+
+  <section class="bg-white">
+    <div class="container-site py-14 lg:py-18">
+      <h2 class="text-center text-2xl font-bold text-garden-900 sm:text-3xl">{t.support.title}</h2>
+      <ul class="mx-auto mt-8 max-w-2xl space-y-3">
+        {
+          t.support.items.map((item) => (
+            <li class="flex items-start gap-3 rounded-xl bg-garden-50 p-4">
+              <svg class="mt-0.5 shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-garden-600)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              <span class="text-sm leading-relaxed text-ink-700">{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="mt-10 text-center">
+        <a
+          href={t.cta.href}
+          class="btn-primary"
+          {...t.cta.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+        >
+          {t.cta.label}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>

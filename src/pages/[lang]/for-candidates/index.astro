@@ -1,0 +1,473 @@
+---
+import { Image } from 'astro:assets'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import BridgeArc from '../../../components/BridgeArc.astro'
+import SectionHeading from '../../../components/SectionHeading.astro'
+import TestimonialCard from '../../../components/TestimonialCard.astro'
+import { getStaticLangPaths, type Lang } from '../../../i18n/ui'
+import imgClass from '../../../assets/images/lpk-bekasi.webp'
+import imgAlumni1 from '../../../assets/images/fahrul_rozi.webp'
+import imgAlumni2 from '../../../assets/images/selli.webp'
+import imgAlumni3 from '../../../assets/images/ruswandi.webp'
+// Testimoni 2 & 3 belum punya foto asli → TestimonialCard render avatar inisial
+
+export function getStaticPaths() {
+  return getStaticLangPaths()
+}
+const lang = Astro.params.lang as Lang
+
+const t = {
+  id: {
+    meta: {
+      title: 'Kerja di Jepang — Resmi, Aman, Tanpa Calo',
+      description:
+        'Ingin kerja di Jepang? PT Kebun Teknologi Indonesia adalah P3MI berizin resmi Kemnaker. Program SSW/Tokutei Ginou, magang, dan Ikusei Shuro. Pelatihan di Solo & Bekasi, biaya transparan, pendampingan sampai di Jepang.'
+    },
+    hero: {
+      eyebrow: 'Untuk Calon Pekerja',
+      title: 'Kerja di Jepang, resmi dan aman.',
+      lead: 'Kamu tidak perlu lewat calo untuk bekerja di Jepang. Kami P3MI berizin resmi Kementerian Ketenagakerjaan, dengan training center sendiri dan tim pendamping di Jepang. Dari daftar sampai kamu menerima gaji pertama di Jepang, semua prosesnya jelas dan bisa kamu pantau.',
+      cta1: 'Daftar via WhatsApp',
+      cta2: 'Lihat programnya dulu'
+    },
+    programs: {
+      title: 'Pilih jalur yang cocok untukmu',
+      subtitle:
+        'Semua program di bawah ini resmi diakui pemerintah Jepang dan Indonesia. Tidak yakin pilih yang mana? Konsultasi dulu saja, gratis.',
+      items: [
+        {
+          name: 'Tokutei Ginou (SSW)',
+          tag: 'Langsung kerja',
+          body: 'Bekerja penuh di Jepang dengan gaji setara pekerja Jepang di posisi yang sama. Perlu lulus tes bahasa (JFT-Basic/JLPT N4) dan tes keterampilan bidang. Kontrak sampai 5 tahun, dan bisa lanjut ke jenjang berikutnya.',
+          fit: 'Cocok untuk: kamu yang siap kerja dan mau penghasilan maksimal.'
+        },
+        {
+          name: 'Magang Teknis (Ginou Jisshu)',
+          tag: 'Belajar sambil kerja',
+          body: 'Program magang untuk belajar keterampilan industri Jepang sambil bekerja. Program ini sedang beralih ke sistem baru bernama Ikusei Shuro yang lebih melindungi pekerja.',
+          fit: 'Cocok untuk: lulusan baru yang ingin pengalaman pertama di Jepang.'
+        },
+        {
+          name: 'Ikusei Shuro (sistem baru)',
+          tag: 'Jalur karier',
+          body: 'Pengganti program magang yang dirancang pemerintah Jepang: 3 tahun pengembangan keterampilan dengan jalur jelas untuk naik ke SSW — artinya karier jangka panjang di Jepang.',
+          fit: 'Cocok untuk: kamu yang ingin membangun karier bertahap di Jepang.'
+        }
+      ]
+    },
+    requirements: {
+      title: 'Syarat umum',
+      subtitle:
+        'Syarat detail berbeda per program dan bidang kerja — ini gambaran umumnya.',
+      items: [
+        'Usia 18–30 tahun (beberapa bidang bisa berbeda)',
+        'Lulusan SMA/SMK/D3/S1 semua jurusan',
+        'Sehat jasmani dan rohani (ada medical check-up)',
+        'Berkomitmen menyelesaikan pelatihan bahasa Jepang',
+        'Tidak perlu bisa bahasa Jepang dulu — kami yang melatih dari nol'
+      ]
+    },
+    flow: {
+      title: 'Alur pendaftaran',
+      steps: [
+        {
+          title: 'Konsultasi gratis',
+          body: 'Hubungi kami via WhatsApp atau form. Ceritakan latar belakangmu, kami bantu pilih program yang pas.'
+        },
+        {
+          title: 'Pendaftaran & seleksi awal',
+          body: 'Lengkapi dokumen (ijazah, KTP, dll.), lalu ikuti tes dasar dan wawancara dengan tim kami.'
+        },
+        {
+          title: 'Pelatihan di LPK Kebun',
+          body: 'Belajar bahasa Jepang dan budaya kerja di training center Solo atau Bekasi sampai siap ikut tes dan wawancara kerja.'
+        },
+        {
+          title: 'Wawancara dengan perusahaan Jepang',
+          body: 'Kami carikan lowongan yang cocok dan siapkan kamu menghadapi wawancara (biasanya online).'
+        },
+        {
+          title: 'Pengurusan visa & keberangkatan',
+          body: 'Setelah diterima, kami urus dokumen keimigrasian sampai kamu terbang ke Jepang.'
+        },
+        {
+          title: 'Pendampingan di Jepang',
+          body: 'Tim grup kami di Nagoya (ANC Japan) mendampingi kamu: tempat tinggal, dokumen, sampai konsultasi kalau ada masalah di tempat kerja.'
+        }
+      ]
+    },
+    safety: {
+      title: 'Soal biaya: terbuka sejak awal',
+      body: 'Semua komponen biaya kami jelaskan tertulis sebelum kamu mendaftar — tidak ada biaya siluman, tidak ada potongan gaji misterius. Waspadai ciri-ciri calo: minta uang tanpa rincian jelas, janji "pasti berangkat bulan depan", atau tidak bisa menunjukkan izin resmi. Kamu bisa cek izin P3MI kami langsung di Kementerian Ketenagakerjaan.',
+      points: [
+        'Rincian biaya tertulis sebelum daftar',
+        'Tidak ada jalur "titipan" atau uang pelicin',
+        'Izin P3MI bisa diverifikasi di Kemnaker: 8120101 9920710004',
+        'Kontrak kerja jelas sebelum berangkat'
+      ]
+    },
+    testimonials: {
+      title: 'Cerita alumni',
+      subtitle:
+        'Mereka sudah membuktikan jalannya. Kamu bisa jadi yang berikutnya.'
+    },
+    faq: {
+      title: 'Pertanyaan yang sering ditanya',
+      items: [
+        {
+          q: 'Berapa lama prosesnya sampai berangkat?',
+          a: 'Tergantung program dan seberapa cepat kamu menguasai bahasa Jepang. Umumnya beberapa bulan sejak mulai pelatihan. Yang pasti: kami tidak pernah menjanjikan "berangkat bulan depan" — kalau ada yang janji begitu, hati-hati.'
+        },
+        {
+          q: 'Apakah harus bisa bahasa Jepang dulu?',
+          a: 'Tidak. Kamu akan dilatih dari nol di training center kami di Solo atau Bekasi sampai lulus standar yang dibutuhkan (JFT-Basic atau JLPT N4).'
+        },
+        {
+          q: 'Berapa gajinya di Jepang?',
+          a: 'Gaji mengikuti standar upah di Jepang dan tertulis di kontrak kerja yang kamu tanda tangani sebelum berangkat. Untuk program SSW, gajinya setara dengan pekerja Jepang di posisi yang sama.'
+        },
+        {
+          q: 'Kalau ada masalah di Jepang, siapa yang bantu?',
+          a: 'Grup kami ANC Japan di Nagoya punya tim orang Indonesia yang siap membantu — soal pekerjaan, tempat tinggal, maupun dokumen. Kamu tidak akan ditinggal sendirian.'
+        },
+        {
+          q: 'Perempuan bisa ikut?',
+          a: 'Bisa. Banyak bidang terbuka untuk perempuan, misalnya perawatan lansia (kaigo), pengolahan makanan, dan perhotelan.'
+        }
+      ]
+    },
+    apply: {
+      title: 'Siap mulai? Daftar sekarang',
+      body: 'Konsultasi dulu juga boleh — gratis dan tanpa ikatan. Tim kami akan menjawab semua pertanyaanmu dengan jujur.',
+      whatsapp: 'Chat WhatsApp',
+      form: 'Isi Form Pendaftaran'
+    }
+  },
+  ja: {
+    meta: {
+      title: '求職者の方へ（インドネシア人材向けページ）',
+      description:
+        'インドネシア人求職者向けの応募案内ページです。特定技能・技能実習・育成就労プログラムの説明、応募の流れ、トレーニングセンター情報を掲載しています（主にインドネシア語）。'
+    },
+    hero: {
+      eyebrow: 'For Candidates',
+      title: 'インドネシア人求職者の方へ',
+      lead: 'このページは、日本での就労を希望するインドネシア人求職者向けのコンテンツです。応募条件やプログラムの詳細は、インドネシア語版ページをご覧ください。企業の採用ご担当者様は「企業の皆さまへ」をご覧ください。',
+      cta1: 'インドネシア語版を見る',
+      cta2: '企業の皆さまへ'
+    }
+  },
+  en: {
+    meta: {
+      title: 'For Indonesian Candidates',
+      description:
+        'Information for Indonesian candidates who want to work in Japan through official channels: SSW, technical intern and Ikusei Shuro programs. Full details available in Indonesian.'
+    },
+    hero: {
+      eyebrow: 'For Candidates',
+      title: 'Work in Japan, the official way',
+      lead: 'This page is written primarily for Indonesian candidates — the complete version is available in Indonesian. We are a licensed P3MI with our own training centers and a support team in Japan.',
+      cta1: 'Read in Indonesian',
+      cta2: 'For companies'
+    }
+  }
+}[lang === 'id' ? 'id' : lang]
+
+const isFullPage = lang === 'id'
+const tid = t as typeof t & Record<string, any>
+
+// <!-- GANTI DENGAN TESTIMONI ASLI --> struktur lengkap: nama, program, prefektur
+const testimonials = [
+  {
+    name: 'Fahrul Rozi',
+    program: 'Tokutei Ginou — Perawatan Lansia (Kaigo)',
+    prefecture: 'Prefektur Gunma',
+    quote:
+      'Genap 4 tahun bekerja di Jepang, saya bersyukur telah lulus ujian Kaigofukushishi dan dipercaya menjadi Ketua IM3 Gunma. Semua pencapaian ini tidak lepas dari dukungan dan peran LPK Kebun sejak awal proses keberangkatan kami pada 2021, serta dukungan perusahaan selama di Jepang.',
+    photo: imgAlumni1,
+    photoAlt: 'Foto alumni program Tokutei Ginou'
+  },
+  {
+    name: 'Selli Sofitalia',
+    program: 'Magang Teknis — Perawatan Mesin ',
+    prefecture: 'Prefektur Mie',
+    quote:
+      'ここから、また新しい物語。🇯🇵 🤍 Terima kasih LPK KEBUN sudah menjadi bagian dari perjalanan saya sampai ke Jepang🙌🏻🙏🏻. Akhirnya bisa bertemu Mario Bross hehe 夢に向かって頑張ります。✨',
+    photo: imgAlumni2,
+    photoAlt: 'Foto alumni program Ginou Jisshu'
+  },
+  {
+    name: 'Ruswandi',
+    program: 'Magang Teknis — Konstruksi Perancah',
+    prefecture: 'Prefektur Aichi',
+    quote:
+      'Berkat LPK Kebun, saya bisa berada di Jepang, tepatnya di Nagoya, sampai saat ini. Terima kasih kepada LPK Kebun dan para Sensei yang telah membimbing kami. Semoga untuk calon pekerja Jepang selanjutnya, segala urusannya dimudahkan dan dilancarkan. Terima kasih LPK Kebun. Kebun Yos!',
+    photo: imgAlumni3,
+    photoAlt: 'Foto alumni program Ginou Jisshu'
+  }
+]
+
+const waHref = 'https://wa.me/6281903353533'
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.meta.title}
+  description={t.meta.description}
+  path="/for-candidates/"
+>
+  {/* ===== Hero ===== */}
+  <section class="bg-washi-50">
+    <div class="container-site py-16 lg:py-20">
+      <div class="max-w-3xl">
+        <p class="eyebrow">{t.hero.eyebrow}</p>
+        <h1 class="mt-2 text-3xl font-extrabold text-garden-900 sm:text-4xl">
+          {t.hero.title}
+        </h1>
+        <p class="mt-6 leading-relaxed text-ink-600">{t.hero.lead}</p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          {
+            isFullPage ? (
+              <>
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn-primary"
+                >
+                  {tid.hero.cta1}
+                </a>
+                <a href="#program" class="btn-outline">
+                  {tid.hero.cta2}
+                </a>
+              </>
+            ) : (
+              <>
+                <a href="/id/for-candidates/" class="btn-primary">
+                  {tid.hero.cta1}
+                </a>
+                <a href={`/${lang}/for-companies/`} class="btn-outline">
+                  {tid.hero.cta2}
+                </a>
+              </>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    isFullPage && (
+      <>
+        {/* ===== Program ===== */}
+        <section id="program" class="bg-white">
+          <div class="container-site py-16 lg:py-20">
+            <SectionHeading
+              title={tid.programs.title}
+              subtitle={tid.programs.subtitle}
+            />
+            <div class="mt-10 grid gap-6 lg:grid-cols-3">
+              {tid.programs.items.map((p: any) => (
+                <div class="card flex flex-col">
+                  <span class="self-start rounded-full bg-torii-50 px-3 py-1 text-xs font-bold text-torii-600">
+                    {p.tag}
+                  </span>
+                  <h3 class="mt-3 text-lg font-bold text-garden-900">
+                    {p.name}
+                  </h3>
+                  <p class="mt-3 flex-1 text-sm leading-relaxed text-ink-600">
+                    {p.body}
+                  </p>
+                  <p class="mt-4 rounded-lg bg-garden-50 px-3 py-2 text-xs font-semibold text-garden-800">
+                    {p.fit}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ===== Syarat ===== */}
+        <section class="bg-garden-50">
+          <div class="container-site py-16 lg:py-20">
+            <div class="grid items-center gap-10 lg:grid-cols-2">
+              <div>
+                <h2 class="text-2xl font-bold text-garden-900 sm:text-3xl">
+                  {tid.requirements.title}
+                </h2>
+                <p class="mt-3 text-ink-600">{tid.requirements.subtitle}</p>
+                <ul class="mt-6 space-y-3">
+                  {tid.requirements.items.map((item: string) => (
+                    <li class="flex items-start gap-3">
+                      <svg
+                        class="mt-0.5 shrink-0"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="var(--color-garden-600)"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                      <span class="text-sm leading-relaxed text-ink-700">
+                        {item}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* FOTO: kelas bahasa Jepang di training center (Solo/Bekasi) */}
+              <Image
+                src={imgClass}
+                alt="Suasana kelas bahasa Jepang di training center LPK Kebun"
+                class="w-full rounded-2xl border border-washi-200 object-cover"
+              />
+            </div>
+          </div>
+        </section>
+
+        {/* ===== Alur ===== */}
+        <section class="bg-white">
+          <div class="container-site py-16 lg:py-20">
+            <SectionHeading title={tid.flow.title} />
+            <ol class="relative mx-auto mt-12 max-w-3xl space-y-8 border-l-2 border-torii-500 pl-8">
+              {tid.flow.steps.map((step: any, i: number) => (
+                <li class="relative">
+                  <span class="absolute -left-[49px] flex h-8 w-8 items-center justify-center rounded-full bg-torii-500 text-sm font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <h3 class="font-bold text-garden-900">{step.title}</h3>
+                  <p class="mt-1.5 text-sm leading-relaxed text-ink-600">
+                    {step.body}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        {/* ===== Keamanan & biaya ===== */}
+        <section class="bg-garden-900">
+          <div class="container-site py-16 lg:py-20">
+            <div class="mx-auto max-w-3xl">
+              <h2 class="text-2xl font-bold text-white sm:text-3xl">
+                {tid.safety.title}
+              </h2>
+              <p class="mt-5 leading-relaxed text-garden-100">
+                {tid.safety.body}
+              </p>
+              <ul class="mt-7 grid gap-3 sm:grid-cols-2">
+                {tid.safety.points.map((point: string) => (
+                  <li class="flex items-start gap-2.5 rounded-xl bg-garden-800 p-4">
+                    <svg
+                      class="mt-0.5 shrink-0"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="var(--color-garden-300)"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <span class="text-sm text-garden-100">{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* ===== Testimoni ===== */}
+        <section class="bg-washi-50">
+          <div class="container-site py-16 lg:py-20">
+            <SectionHeading
+              title={tid.testimonials.title}
+              subtitle={tid.testimonials.subtitle}
+            />
+            <div class="mt-10 grid gap-6 md:grid-cols-3">
+              {testimonials.map((item) => (
+                <TestimonialCard {...item} />
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ===== FAQ ===== */}
+        <section class="bg-white">
+          <div class="container-site py-16 lg:py-20">
+            <SectionHeading title={tid.faq.title} />
+            <div class="mx-auto mt-8 max-w-3xl space-y-3">
+              {tid.faq.items.map((item: any) => (
+                <details class="group card !p-0">
+                  <summary class="flex cursor-pointer items-center justify-between gap-4 p-5 font-bold text-ink-900 [&::-webkit-details-marker]:hidden">
+                    {item.q}
+                    <svg
+                      class="shrink-0 transition-transform group-open:rotate-180"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      stroke-linecap="round"
+                      aria-hidden="true"
+                    >
+                      <path d="m6 9 6 6 6-6" />
+                    </svg>
+                  </summary>
+                  <p class="border-t border-washi-200 p-5 text-sm leading-relaxed text-ink-600">
+                    {item.a}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ===== CTA Daftar ===== */}
+        <section id="daftar" class="bg-torii-50">
+          <div class="container-site py-16 text-center lg:py-20">
+            <h2 class="text-2xl font-bold text-garden-900 sm:text-3xl">
+              {tid.apply.title}
+            </h2>
+            <BridgeArc variant="divider" class="mt-2" />
+            <p class="mx-auto mt-4 max-w-xl leading-relaxed text-ink-600">
+              {tid.apply.body}
+            </p>
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-primary"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.2 1.1-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.4.2.5.7 1.8.8 1.9.1.1.1.3 0 .5l-.4.6c-.1.2-.3.3-.1.6.2.3.7 1.2 1.5 1.9 1.1.9 1.9 1.2 2.2 1.4.3.1.4.1.6-.1l.9-1c.2-.3.4-.2.7-.1l1.7.8c.3.1.5.2.5.3.1.2.1.7-.1 1.3z" />
+                </svg>
+                {tid.apply.whatsapp}
+              </a>
+              <a href="/id/contact/" class="btn-outline">
+                {tid.apply.form}
+              </a>
+            </div>
+          </div>
+        </section>
+      </>
+    )
+  }
+</BaseLayout>

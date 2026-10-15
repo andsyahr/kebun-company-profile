@@ -1,0 +1,134 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ContactForm from '../../../components/ContactForm.astro';
+import BridgeArc from '../../../components/BridgeArc.astro';
+import { getStaticLangPaths, type Lang } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return getStaticLangPaths();
+}
+const lang = Astro.params.lang as Lang;
+
+const t = {
+  ja: {
+    meta: {
+      title: 'お問い合わせ・無料相談',
+      description:
+        'インドネシア人材の受け入れに関する無料相談、ビジネスコンサルティングのご相談はこちらから。フォーム・メールにて受け付けています。',
+    },
+    title: 'お問い合わせ',
+    lead: '受け入れのご相談、お見積り、制度に関するご質問など、お気軽にお問い合わせください。ご相談は無料です。',
+    channels: {
+      title: '直接のご連絡',
+      companies: { title: '企業・団体の皆さま', body: 'メールでのご連絡が確実です。オンライン面談（日本語）も承ります。', lines: ['Email: business@kebun.tech', '電話: +62 21 82674374'] },
+      candidates: { title: '求職者の方（インドネシア語）', body: 'Untuk calon pekerja: hubungi kami via WhatsApp.', lines: ['WhatsApp: +62 819 0335 3533'] },
+      office: { title: '所在地', lines: ['Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu, Bekasi Timur, West Java 17113, Indonesia'] },
+    },
+  },
+  id: {
+    meta: {
+      title: 'Kontak & Pendaftaran',
+      description:
+        'Hubungi PT Kebun Teknologi Indonesia: pendaftaran calon pekerja via WhatsApp, pertanyaan perusahaan via email, atau isi form kontak. Konsultasi gratis.',
+    },
+    title: 'Hubungi Kami',
+    lead: 'Mau daftar, tanya-tanya program, atau konsultasi dulu? Semua gratis. Pilih cara yang paling nyaman buatmu.',
+    channels: {
+      title: 'Kontak langsung',
+      candidates: { title: 'Calon pekerja', body: 'Cara tercepat: chat WhatsApp. Tim kami menjawab dalam bahasa Indonesia.', lines: ['WhatsApp: +62 819 0335 3533'] },
+      companies: { title: 'Perusahaan', body: 'Untuk perusahaan Jepang / mitra bisnis, silakan email.', lines: ['Email: business@kebun.tech', 'Telepon: +62 21 82674374'] },
+      office: { title: 'Alamat kantor', lines: ['Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu, Bekasi Timur, West Java 17113, Indonesia'] },
+    },
+  },
+  en: {
+    meta: {
+      title: 'Contact',
+      description:
+        'Contact PT Kebun Teknologi Indonesia: free consultation for companies, WhatsApp registration for candidates, or use the contact form.',
+    },
+    title: 'Contact Us',
+    lead: 'Questions about hiring, programs, or partnership? Consultation is free — reach us the way that suits you.',
+    channels: {
+      title: 'Direct contact',
+      companies: { title: 'Companies & organizations', body: 'Email is the most reliable channel. Online meetings available in Japanese or English.', lines: ['Email: business@kebun.tech', 'Phone: +62 21 82674374'] },
+      candidates: { title: 'Candidates (Indonesian)', body: 'The fastest way is WhatsApp — our team replies in Indonesian.', lines: ['WhatsApp: +62 819 0335 3533'] },
+      office: { title: 'Office', lines: ['Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu, Bekasi Timur, West Java 17113, Indonesia'] },
+    },
+  },
+}[lang];
+
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EmploymentAgency',
+  name: 'PT Kebun Teknologi Indonesia',
+  url: 'https://kebun.tech',
+  email: 'business@kebun.tech',
+  telephone: '+62 21 82674374',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu',
+    addressLocality: 'Bekasi Timur, Bekasi',
+    addressRegion: 'West Java',
+    postalCode: '17113',
+    addressCountry: 'ID',
+  },
+};
+
+const channelOrder =
+  lang === 'id'
+    ? ([t.channels.candidates, t.channels.companies] as const)
+    : ([t.channels.companies, t.channels.candidates] as const);
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} path="/contact/" extraJsonLd={[localBusinessJsonLd]}>
+  <section class="bg-washi-50">
+    <div class="container-site py-14 lg:py-16">
+      <h1 class="text-center text-3xl font-extrabold text-garden-900 sm:text-4xl">{t.title}</h1>
+      <BridgeArc variant="divider" class="mt-3" />
+      <p class="mx-auto mt-3 max-w-xl text-center leading-relaxed text-ink-600">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="bg-white">
+    <div class="container-site grid gap-10 py-14 lg:grid-cols-[1fr_380px] lg:py-18">
+      <ContactForm lang={lang} />
+
+      <aside>
+        <h2 class="text-lg font-bold text-garden-900">{t.channels.title}</h2>
+        <div class="mt-4 space-y-4">
+          {
+            channelOrder.map((ch) => (
+              <div class="card">
+                <h3 class="font-bold text-ink-900">{ch.title}</h3>
+                {'body' in ch && <p class="mt-1.5 text-sm text-ink-600">{ch.body}</p>}
+                <ul class="mt-3 space-y-1.5 text-sm font-semibold text-garden-800">
+                  {ch.lines.map((line) => (
+                    <li>
+                      {line.startsWith('WhatsApp') ? (
+                        <a href="https://wa.me/6281903353533" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 text-garden-700 underline underline-offset-2 hover:text-garden-900">
+                          {line}
+                        </a>
+                      ) : line.startsWith('Email') ? (
+                        <a href="mailto:business@kebun.tech" class="inline-flex items-center gap-1.5 text-garden-700 underline underline-offset-2 hover:text-garden-900">
+                          {line}
+                        </a>
+                      ) : (
+                        line
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+          <div class="card">
+            <h3 class="font-bold text-ink-900">{t.channels.office.title}</h3>
+            <ul class="mt-3 space-y-1.5 text-sm text-ink-700">
+              {t.channels.office.lines.map((line) => <li>{line}</li>)}
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

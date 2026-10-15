@@ -1,0 +1,125 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import SectionHeading from '../../../../components/SectionHeading.astro';
+import CTASection from '../../../../components/CTASection.astro';
+import { getStaticLangPaths, type Lang } from '../../../../i18n/ui';
+
+export function getStaticPaths() {
+  return getStaticLangPaths();
+}
+const lang = Astro.params.lang as Lang;
+
+const t = {
+  ja: {
+    meta: {
+      title: '特定技能（SSW）人材紹介',
+      description:
+        '特定技能1号・2号に対応したインドネシア人材のご紹介。JLPT/JFT-Basic対策と技能試験対策を自社トレーニングセンターで実施。面接から定着支援までワンストップでご支援します。',
+    },
+    eyebrow: 'Service 01',
+    title: '特定技能（SSW）人材紹介',
+    lead: '特定技能制度は、人手不足が深刻な分野で即戦力となる外国人材を受け入れるための在留資格です。当社は、日本語試験・技能試験の対策教育を自社トレーニングセンターで行ったうえで、貴社の求人要件に合致した候補者をご紹介します。',
+    sections: [
+      {
+        title: '対応分野',
+        body: '介護、外食業、飲食料品製造業、建設、農業、宿泊をはじめとする特定技能の主要分野に対応しています。分野ごとの受け入れ要件・試験の詳細は、ご相談時に最新の制度情報をもとにご案内します。',
+      },
+      {
+        title: '候補者の要件',
+        body: '特定技能1号は、日本語能力（JLPT N4以上またはJFT-Basic合格）と分野別技能試験の合格が要件です。当社の候補者はトレーニングセンターで試験対策と職場文化教育を修了しており、面接時点で「働く準備」ができています。',
+      },
+      {
+        title: '当社の強み',
+        body: '10校以上のSMK（インドネシアの職業高校）との連携による人材パイプラインを持ち、技能系の基礎教育を受けた若い人材を安定的に確保しています。自社トレーニングセンターでの教育から、日本側グループ会社ANCジャパン（登録支援機関）による入国後の支援計画実施まで、グループ内で一貫して対応します。',
+      },
+      {
+        title: '特定技能2号への展望',
+        body: '熟練技能が認められる特定技能2号への移行を見据え、長期的なキャリア形成を前提とした人材育成を行っています。「すぐ辞めない人材」を求める企業様にこそ、当社の教育方針をご評価いただいています。',
+      },
+    ],
+    cta: { label: '受け入れのご相談（無料）', href: '/ja/contact/' },
+  },
+  id: {
+    meta: {
+      title: 'Program Tokutei Ginou (SSW)',
+      description:
+        'Program Tokutei Ginou / Specified Skilled Worker: bekerja penuh di Jepang dengan gaji setara pekerja lokal. Syarat, bidang kerja, dan alur persiapan bersama PT Kebun Teknologi Indonesia.',
+    },
+    eyebrow: 'Program 01',
+    title: 'Tokutei Ginou (SSW)',
+    lead: 'Tokutei Ginou — sering disebut SSW (Specified Skilled Worker) — adalah visa kerja resmi Jepang untuk bidang-bidang yang kekurangan tenaga. Artinya kamu bekerja penuh sebagai karyawan, dengan gaji dan perlindungan yang setara pekerja Jepang di posisi yang sama.',
+    sections: [
+      {
+        title: 'Bidang kerja',
+        body: 'Perawatan lansia (kaigo), restoran & layanan makanan, pengolahan makanan, konstruksi, pertanian, perhotelan, dan bidang utama lainnya. Setiap bidang punya tes keterampilannya sendiri — kami bantu pilih yang paling cocok dengan latar belakangmu.',
+      },
+      {
+        title: 'Syaratnya apa saja?',
+        body: 'Dua tes utama: tes bahasa Jepang (JFT-Basic atau JLPT N4) dan tes keterampilan sesuai bidang. Belum bisa bahasa Jepang? Tenang — justru itu gunanya training center kami di Solo dan Bekasi. Kamu dilatih dari nol sampai lulus.',
+      },
+      {
+        title: 'Berapa lama kontraknya?',
+        body: 'Visa SSW tahap 1 berlaku total sampai 5 tahun. Kalau kamu berkembang, ada jalur ke SSW tahap 2 yang bisa diperpanjang terus dan membuka peluang membawa keluarga ke Jepang.',
+      },
+      {
+        title: 'Kenapa lewat Kebun?',
+        body: 'Karena kami memegang izin resmi P3MI, melatihmu di fasilitas sendiri, dan punya tim orang Indonesia di Nagoya yang mendampingimu setelah tiba. Semua biaya dijelaskan tertulis di awal — tanpa calo, tanpa biaya siluman.',
+      },
+    ],
+    cta: { label: 'Tanya Program SSW via WhatsApp', href: 'https://wa.me/6281903353533' },
+  },
+  en: {
+    meta: {
+      title: 'Specified Skilled Worker (SSW) Placement',
+      description:
+        'SSW placement of Indonesian workers: language and skills-test preparation at our own training centers, interviews to retention support in one group.',
+    },
+    eyebrow: 'Service 01',
+    title: 'Specified Skilled Worker (SSW)',
+    lead: 'The SSW visa lets Japanese employers hire job-ready foreign workers in designated shortage industries. We prepare candidates at our own training centers and support both sides from interview to long-term retention.',
+    sections: [
+      { title: 'Covered industries', body: 'Care, food service, food manufacturing, construction, agriculture, hospitality and other major SSW fields.' },
+      { title: 'Candidate requirements', body: 'JLPT N4 or JFT-Basic plus the industry skills test. Our candidates complete test preparation and workplace-culture training before interviews.' },
+      { title: 'Our edge', body: 'A talent pipeline built with 10+ partner SMK vocational high schools, our own training centers, and post-arrival support through ANC Japan — one group, end to end.' },
+      { title: 'Toward SSW type 2', body: 'We develop talent with long-term careers in mind, including the path to the renewable SSW type 2 status.' },
+    ],
+    cta: { label: 'Free consultation', href: '/en/contact/' },
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} path="/services/ssw/">
+  <section class="bg-garden-900">
+    <div class="container-site py-14 lg:py-18">
+      <p class="eyebrow !text-garden-300">{t.eyebrow}</p>
+      <h1 class="mt-2 max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">{t.title}</h1>
+      <p class="mt-5 max-w-3xl leading-relaxed text-garden-100">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="bg-washi-50">
+    <div class="container-site py-14 lg:py-18">
+      <div class="grid gap-6 md:grid-cols-2">
+        {
+          t.sections.map((s) => (
+            <div class="card">
+              <h2 class="text-lg font-bold text-garden-900">{s.title}</h2>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div class="mt-10 text-center">
+        <a
+          href={t.cta.href}
+          class="btn-primary"
+          {...t.cta.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+        >
+          {t.cta.label}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>

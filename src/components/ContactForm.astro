@@ -1,0 +1,151 @@
+---
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  ja: {
+    category: 'お問い合わせ区分',
+    categories: ['企業（受け入れのご相談）', '監理団体・登録支援機関', '求職者（応募・ご質問）', 'ビジネスコンサルティング', 'その他'],
+    name: 'お名前',
+    company: '会社名（企業の方）',
+    email: 'メールアドレス',
+    phone: '電話番号 / WhatsApp',
+    message: 'お問い合わせ内容',
+    submit: '送信する',
+    sending: '送信中…',
+    success: 'お問い合わせありがとうございます。担当者より折り返しご連絡いたします。',
+    error: '送信に失敗しました。お手数ですが、メール（business@kebun.tech）にて直接ご連絡ください。',
+    required: '必須',
+  },
+  id: {
+    category: 'Jenis pertanyaan',
+    categories: ['Calon pekerja (daftar / tanya program)', 'Perusahaan Jepang', 'Konsultasi bisnis', 'Lainnya'],
+    name: 'Nama lengkap',
+    company: 'Nama perusahaan (jika ada)',
+    email: 'Email',
+    phone: 'No. HP / WhatsApp',
+    message: 'Pesan',
+    submit: 'Kirim',
+    sending: 'Mengirim…',
+    success: 'Terima kasih! Pesanmu sudah kami terima. Tim kami akan segera menghubungimu.',
+    error: 'Maaf, pengiriman gagal. Silakan hubungi kami langsung via WhatsApp +62 819 0335 3533 atau email business@kebun.tech.',
+    required: 'wajib',
+  },
+  en: {
+    category: 'Inquiry type',
+    categories: ['Japanese company', 'Candidate', 'Business consulting', 'Other'],
+    name: 'Full name',
+    company: 'Company name (if any)',
+    email: 'Email',
+    phone: 'Phone / WhatsApp',
+    message: 'Message',
+    submit: 'Send',
+    sending: 'Sending…',
+    success: 'Thank you! We have received your message and will get back to you shortly.',
+    error: 'Sending failed. Please contact us directly at business@kebun.tech.',
+    required: 'required',
+  },
+}[lang];
+---
+
+<form id="contact-form" class="card space-y-5" novalidate>
+  <div>
+    <label for="cf-category" class="block text-sm font-semibold text-ink-900">
+      {t.category} <span class="text-torii-600" aria-hidden="true">*</span>
+    </label>
+    <select
+      id="cf-category"
+      name="category"
+      required
+      class="mt-1.5 w-full rounded-lg border border-washi-200 bg-washi-50 px-3 py-2.5 text-sm"
+    >
+      {t.categories.map((c) => <option value={c}>{c}</option>)}
+    </select>
+  </div>
+
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div>
+      <label for="cf-name" class="block text-sm font-semibold text-ink-900">
+        {t.name} <span class="text-torii-600" aria-hidden="true">*</span>
+      </label>
+      <input id="cf-name" name="name" type="text" required autocomplete="name"
+        class="mt-1.5 w-full rounded-lg border border-washi-200 bg-washi-50 px-3 py-2.5 text-sm" />
+    </div>
+    <div>
+      <label for="cf-company" class="block text-sm font-semibold text-ink-900">{t.company}</label>
+      <input id="cf-company" name="company" type="text" autocomplete="organization"
+        class="mt-1.5 w-full rounded-lg border border-washi-200 bg-washi-50 px-3 py-2.5 text-sm" />
+    </div>
+    <div>
+      <label for="cf-email" class="block text-sm font-semibold text-ink-900">
+        {t.email} <span class="text-torii-600" aria-hidden="true">*</span>
+      </label>
+      <input id="cf-email" name="email" type="email" required autocomplete="email"
+        class="mt-1.5 w-full rounded-lg border border-washi-200 bg-washi-50 px-3 py-2.5 text-sm" />
+    </div>
+    <div>
+      <label for="cf-phone" class="block text-sm font-semibold text-ink-900">{t.phone}</label>
+      <input id="cf-phone" name="phone" type="tel" autocomplete="tel"
+        class="mt-1.5 w-full rounded-lg border border-washi-200 bg-washi-50 px-3 py-2.5 text-sm" />
+    </div>
+  </div>
+
+  <div>
+    <label for="cf-message" class="block text-sm font-semibold text-ink-900">
+      {t.message} <span class="text-torii-600" aria-hidden="true">*</span>
+    </label>
+    <textarea id="cf-message" name="message" rows="5" required
+      class="mt-1.5 w-full rounded-lg border border-washi-200 bg-washi-50 px-3 py-2.5 text-sm"></textarea>
+  </div>
+
+  {/* Honeypot anti-spam sederhana */}
+  <div class="hidden" aria-hidden="true">
+    <label for="cf-website">Website</label>
+    <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <button type="submit" class="btn-primary w-full sm:w-auto" data-label={t.submit} data-sending={t.sending}>
+    {t.submit}
+  </button>
+
+  <p id="cf-status" class="hidden rounded-lg px-4 py-3 text-sm" role="status" data-success={t.success} data-error={t.error}></p>
+</form>
+
+<script>
+  // POST ke /api/contact (serverless function Vercel + nodemailer → business@kebun.tech)
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const status = document.getElementById('cf-status');
+  const button = form?.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.reportValidity() || !status || !button) return;
+    // Honeypot terisi → kemungkinan bot, diam-diam abaikan
+    if ((form.elements.namedItem('website') as HTMLInputElement)?.value) return;
+
+    button.disabled = true;
+    button.textContent = button.dataset.sending ?? '…';
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(Object.fromEntries(new FormData(form))),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      status.textContent = status.dataset.success ?? '';
+      status.className = 'rounded-lg bg-garden-100 px-4 py-3 text-sm text-garden-900';
+      form.reset();
+    } catch {
+      status.textContent = status.dataset.error ?? '';
+      status.className = 'rounded-lg bg-torii-100 px-4 py-3 text-sm text-torii-700';
+    } finally {
+      button.disabled = false;
+      button.textContent = button.dataset.label ?? '';
+      status.classList.remove('hidden');
+    }
+  });
+</script>

@@ -1,0 +1,64 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # GHCR mewajibkan nama image huruf kecil
+      - name: Set image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+          build-args: |
+            PUBLIC_FIREBASE_API_KEY=${{ secrets.PUBLIC_FIREBASE_API_KEY }}
+            PUBLIC_FIREBASE_AUTH_DOMAIN=${{ secrets.PUBLIC_FIREBASE_AUTH_DOMAIN }}
+            PUBLIC_FIREBASE_PROJECT_ID=${{ secrets.PUBLIC_FIREBASE_PROJECT_ID }}
+            PUBLIC_FIREBASE_APP_ID=${{ secrets.PUBLIC_FIREBASE_APP_ID }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      - uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            set -e
+            docker pull ${{ env.IMAGE }}:latest
+            docker stop kebun-web 2>/dev/null || true
+            docker rm kebun-web 2>/dev/null || true
+            docker run -d --name kebun-web --restart unless-stopped \
+              -p 127.0.0.1:4321:4321 \
+              --env-file /etc/kebun/kebun.env \
+              ${{ env.IMAGE }}:latest
+            docker image prune -f

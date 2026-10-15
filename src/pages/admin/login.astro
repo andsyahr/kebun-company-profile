@@ -1,0 +1,64 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { Image } from 'astro:assets';
+import logoKti from '../../assets/kebuntech.png';
+---
+
+<AdminLayout title="Login">
+  <main class="flex min-h-screen items-center justify-center px-4">
+    <div class="card w-full max-w-sm">
+      <h1 class="flex justify-center"><Image src={logoKti} alt="KebunTech — Admin Berita" class="h-12 w-auto" densities={[1, 2]} /></h1>
+      <form id="login-form" class="mt-6 space-y-4">
+        <div>
+          <label for="email" class="mb-1 block text-xs font-bold text-ink-700">Email</label>
+          <input id="email" type="email" required autocomplete="username" class="w-full rounded-lg border border-washi-300 px-3 py-2 text-sm outline-none focus:border-garden-600" placeholder="Ketikkan email anda" />
+        </div>
+        <div>
+          <label for="password" class="mb-1 block text-xs font-bold text-ink-700">Password</label>
+          <input id="password" type="password" required autocomplete="current-password" class="w-full rounded-lg border border-washi-300 px-3 py-2 text-sm outline-none focus:border-garden-600" placeholder="Ketikkan password anda" />
+        </div>
+        <p id="login-error" class="hidden text-sm font-semibold text-red-600"></p>
+        <button type="submit" class="w-full rounded-lg bg-garden-900 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-garden-800 disabled:opacity-50">
+          Masuk
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    import { getFirebaseAuth } from '../../lib/firebase';
+    import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+
+    const auth = getFirebaseAuth();
+    const form = document.getElementById('login-form') as HTMLFormElement;
+    const errorEl = document.getElementById('login-error')!;
+
+    if (!auth) {
+      errorEl.textContent = 'Firebase belum dikonfigurasi (env PUBLIC_FIREBASE_* kosong).';
+      errorEl.classList.remove('hidden');
+    } else {
+      onAuthStateChanged(auth, (user) => {
+        if (user) location.replace('/admin/berita');
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = form.querySelector('button')!;
+        btn.disabled = true;
+        errorEl.classList.add('hidden');
+        try {
+          await signInWithEmailAndPassword(
+            auth,
+            (form.email as HTMLInputElement).value.trim(),
+            (form.password as HTMLInputElement).value
+          );
+          location.replace('/admin/berita');
+        } catch {
+          errorEl.textContent = 'Email atau password salah.';
+          errorEl.classList.remove('hidden');
+          btn.disabled = false;
+        }
+      });
+    }
+  </script>
+</AdminLayout>

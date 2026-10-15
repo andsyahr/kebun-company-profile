@@ -1,0 +1,591 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { Image } from 'astro:assets';
+import logoKti from '../../assets/kebuntech.png';
+---
+
+<AdminLayout title="Kelola Berita">
+  <div id="app" class="hidden">
+    <header class="sticky top-0 z-10 border-b border-washi-200 bg-white">
+      <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+        <h1><Image src={logoKti} alt="KebunTech — Admin Berita" class="h-9 w-auto" densities={[1, 2]} /></h1>
+        <div class="flex items-center gap-3 text-sm">
+          <span id="user-email" class="hidden text-ink-600 sm:inline"></span>
+          <button id="logout" class="rounded-lg border border-washi-300 px-3 py-1.5 text-xs font-bold text-ink-700 hover:bg-washi-100">Keluar</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-6xl px-4 py-6">
+      {/* ===== Toolbar ===== */}
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="text-sm font-bold text-ink-700">
+          Semua artikel <span id="count" class="font-normal text-ink-400"></span>
+        </h2>
+        <button id="new-post" class="inline-flex items-center gap-1.5 rounded-lg bg-garden-900 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-garden-800">
+          <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 4a1 1 0 0 1 1 1v4h4a1 1 0 1 1 0 2h-4v4a1 1 0 1 1-2 0v-4H5a1 1 0 1 1 0-2h4V5a1 1 0 0 1 1-1Z"/></svg>
+          Artikel baru
+        </button>
+      </div>
+
+      {/* ===== Tabel (desktop) ===== */}
+      <div id="list-wrap" class="card mt-4 !overflow-hidden !p-0">
+        <div class="overflow-x-auto">
+          <table class="hidden w-full text-left text-sm md:table">
+            <thead>
+              <tr class="border-b border-washi-200 bg-washi-50 text-xs tracking-wide text-ink-600 uppercase">
+                <th class="px-4 py-3 font-bold">Judul</th>
+                <th class="px-4 py-3 font-bold">Kategori</th>
+                <th class="px-4 py-3 font-bold">Status</th>
+                <th class="px-4 py-3 font-bold">Bahasa</th>
+                <th class="px-4 py-3 font-bold">Tanggal</th>
+                <th class="px-4 py-3 text-right font-bold">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="post-rows" class="divide-y divide-washi-200"></tbody>
+          </table>
+
+          {/* ===== Kartu (mobile) ===== */}
+          <ul id="post-cards" class="divide-y divide-washi-200 md:hidden"></ul>
+        </div>
+
+        <p id="list-empty" class="hidden px-4 py-12 text-center text-sm text-ink-600">
+          Belum ada artikel.<br />Tekan <strong>Artikel baru</strong> untuk mulai menulis.
+        </p>
+      </div>
+
+      {/* ===== Pagination ===== */}
+      <nav id="pager" class="mt-4 hidden flex-col items-center justify-between gap-3 sm:flex-row" aria-label="Navigasi halaman">
+        <p id="pager-info" class="text-xs text-ink-600"></p>
+        <div class="flex items-center gap-1">
+          <button id="pager-prev" class="pager-btn" aria-label="Halaman sebelumnya">‹</button>
+          <span id="pager-nums" class="flex items-center gap-1"></span>
+          <button id="pager-next" class="pager-btn" aria-label="Halaman berikutnya">›</button>
+        </div>
+      </nav>
+    </main>
+  </div>
+
+  {/* ===== Modal form ===== */}
+  {/* Non-modal + backdrop manual: panel CKEditor (balon link dsb.) menempel ke body, akan tertutup top-layer jika dialog modal */}
+  <div id="modal-backdrop" class="fixed inset-0 z-40 hidden bg-ink-900/50"></div>
+  <dialog id="form-modal" class="fixed inset-x-0 bottom-0 z-50 max-h-[92dvh] w-full overflow-y-auto rounded-t-2xl bg-white p-0 md:inset-x-auto md:bottom-auto md:top-1/2 md:left-1/2 md:w-[calc(100%-2rem)] md:max-w-2xl md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-2xl">
+    {/* Handle geser khas bottom-sheet (mobile) */}
+    <div class="mx-auto mt-2 h-1 w-10 rounded-full bg-washi-300 md:hidden" aria-hidden="true"></div>
+
+    <form id="post-form" class="space-y-4 p-4 sm:p-6">
+      <div class="flex items-center justify-between">
+        <h2 id="form-title" class="text-sm font-bold text-ink-700">Artikel baru</h2>
+        <button type="button" id="close-modal" class="rounded-lg p-1.5 text-ink-400 hover:bg-washi-100 hover:text-ink-700" aria-label="Tutup">
+          <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5.22 5.22a.75.75 0 0 1 1.06 0L10 8.94l3.72-3.72a.75.75 0 1 1 1.06 1.06L11.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06L10 11.06l-3.72 3.72a.75.75 0 0 1-1.06-1.06L8.94 10 5.22 6.28a.75.75 0 0 1 0-1.06Z"/></svg>
+        </button>
+      </div>
+      <input type="hidden" id="doc-id" />
+
+      {/* Tab bahasa */}
+      <div class="flex gap-1 rounded-lg bg-washi-100 p-1" role="tablist">
+        <button type="button" data-tab="id" class="tab-btn flex-1 rounded-md px-2 py-1.5 text-xs font-bold">Indonesia</button>
+        <button type="button" data-tab="en" class="tab-btn flex-1 rounded-md px-2 py-1.5 text-xs font-bold">English <span class="tab-badge" data-badge="en"></span></button>
+        <button type="button" data-tab="ja" class="tab-btn flex-1 rounded-md px-2 py-1.5 text-xs font-bold">日本語 <span class="tab-badge" data-badge="ja"></span></button>
+      </div>
+      <p id="tab-hint" class="hidden text-xs text-amber-700"></p>
+
+      <div>
+        <label for="f-title" class="mb-1 block text-xs font-bold text-ink-700">Judul</label>
+        <input id="f-title" required maxlength="150" class="w-full rounded-lg border border-washi-300 px-3 py-2 text-sm outline-none focus:border-garden-600" />
+      </div>
+
+      <div>
+        <label for="f-desc" class="mb-1 block text-xs font-bold text-ink-700">Deskripsi singkat (tampil di daftar & SEO)</label>
+        <textarea id="f-desc" required rows="2" maxlength="300" class="w-full rounded-lg border border-washi-300 px-3 py-2 text-sm outline-none focus:border-garden-600"></textarea>
+      </div>
+
+      <div>
+        <label for="f-body" class="mb-1 block text-xs font-bold text-ink-700">Isi artikel</label>
+        <textarea id="f-body" class="w-full rounded-lg border border-washi-300 px-3 py-2 text-sm outline-none focus:border-garden-600"></textarea>
+      </div>
+
+      {/* Pengaturan global artikel (bukan per bahasa) */}
+      <div class="space-y-3 rounded-lg border border-washi-200 bg-washi-50 p-3">
+        <div>
+          <label for="f-category" class="mb-1 block text-xs font-bold text-ink-700">Kategori</label>
+          <select id="f-category" class="w-full rounded-lg border border-washi-300 px-3 py-2 text-sm outline-none focus:border-garden-600">
+            <option value="news">Berita</option>
+            <option value="column">Artikel</option>
+            <option value="update">Info</option>
+          </select>
+        </div>
+        <label class="flex items-center gap-2 text-sm font-semibold text-ink-700">
+          <input id="f-published" type="checkbox" class="h-4 w-4 accent-garden-800" />
+          Terbitkan (tampil di website)
+        </label>
+      </div>
+
+      <p id="form-error" class="hidden text-sm font-semibold text-red-600"></p>
+      <p id="form-info" class="hidden text-sm font-semibold text-garden-700"></p>
+      <button type="submit" id="save-btn" class="w-full rounded-lg bg-garden-900 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-garden-800 disabled:opacity-50">
+        Simpan
+      </button>
+    </form>
+  </dialog>
+
+  <style>
+    .pager-btn {
+      display: inline-flex;
+      min-width: 2.25rem;
+      min-height: 2.25rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      border: 1px solid var(--color-washi-300);
+      padding: 0 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--color-ink-700);
+      background: white;
+    }
+    .pager-btn:hover:not(:disabled) { background: var(--color-washi-100); }
+    .pager-btn:disabled { opacity: 0.4; cursor: default; }
+    .pager-btn[aria-current='page'] {
+      background: var(--color-garden-900);
+      border-color: var(--color-garden-900);
+      color: white;
+    }
+    #form-modal:not([open]) {
+      display: none;
+    }
+  </style>
+
+  {/* Elemen .ck-* disuntik CKEditor via JS → butuh style global (style Astro default-nya scoped) */}
+  <style is:global>
+    /* CKEditor */
+    .ck-editor__editable_inline { min-height: 14rem; }
+    .ck-body-wrapper { z-index: 100 !important; } /* balon link dsb. di atas backdrop z-40 & dialog z-50 */
+    /* Badge "Powered by CKEditor" — sah disembunyikan di bawah GPL; jalur resmi tanpa badge = lisensi komersial.
+       Badge = balloon panel terpisah di body; sembunyikan kontainernya, bukan cuma isinya. */
+    .ck.ck-powered-by-balloon { display: none !important; }
+    .ck.ck-powered-by { display: none; }
+  </style>
+
+  <script>
+    import { getFirebaseAuth, getDb } from '../../lib/firebase';
+    import { onAuthStateChanged, signOut } from 'firebase/auth';
+    import {
+      addDoc, collection, deleteDoc, doc, getDocs, query, serverTimestamp, updateDoc, where,
+    } from 'firebase/firestore/lite';
+    import { ClassicEditor, Essentials, Paragraph, Heading, Bold, Italic, Link, List, BlockQuote, Undo, Autoformat } from 'ckeditor5';
+    import 'ckeditor5/ckeditor5.css';
+
+    const auth = getFirebaseAuth();
+    const db = getDb();
+    if (!auth || !db) location.replace('/admin/login');
+
+    onAuthStateChanged(auth!, (user) => {
+      if (!user) {
+        location.replace('/admin/login');
+      } else {
+        document.getElementById('user-email')!.textContent = user.email ?? '';
+        document.getElementById('app')!.classList.remove('hidden');
+        loadList();
+      }
+    });
+
+    document.getElementById('logout')!.addEventListener('click', () => signOut(auth!));
+
+    type LangTab = 'id' | 'en' | 'ja';
+    interface ContentBuf { title: string; description: string; body: string }
+    const emptyBuf = (): ContentBuf => ({ title: '', description: '', body: '' });
+
+    const form = document.getElementById('post-form') as HTMLFormElement;
+    const modal = document.getElementById('form-modal') as HTMLDialogElement;
+    const rowsEl = document.getElementById('post-rows')!;
+    const cardsEl = document.getElementById('post-cards')!;
+    const emptyEl = document.getElementById('list-empty')!;
+    const pagerEl = document.getElementById('pager')!;
+    const pagerInfo = document.getElementById('pager-info')!;
+    const pagerNums = document.getElementById('pager-nums')!;
+    const pagerPrev = document.getElementById('pager-prev') as HTMLButtonElement;
+    const pagerNext = document.getElementById('pager-next') as HTMLButtonElement;
+    const errorEl = document.getElementById('form-error')!;
+    const infoEl = document.getElementById('form-info')!;
+    const saveBtn = document.getElementById('save-btn') as HTMLButtonElement;
+    const hintEl = document.getElementById('tab-hint')!;
+    const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+
+    const col = collection(db!, 'news');
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+    const slugify = (s: string) =>
+      s.toLowerCase().normalize('NFKD').replace(/[^a-z0-9\s-]/g, '').trim().replace(/[\s-]+/g, '-').slice(0, 80) || 'artikel';
+
+    let posts: { id: string; [k: string]: any }[] = [];
+    let activeTab: LangTab = 'id';
+    let buffers: Record<LangTab, ContentBuf> = { id: emptyBuf(), en: emptyBuf(), ja: emptyBuf() };
+    let hasTranslation: Record<'en' | 'ja', boolean> = { en: false, ja: false };
+
+    // ---------- CKEditor (isi artikel disimpan sebagai HTML) ----------
+    let bodyEditor: ClassicEditor | undefined;
+    try {
+      bodyEditor = await ClassicEditor.create($('f-body'), {
+        licenseKey: 'GPL',
+        plugins: [Essentials, Paragraph, Heading, Bold, Italic, Link, List, BlockQuote, Undo, Autoformat],
+        toolbar: ['heading', '|', 'bold', 'italic', 'link', '|', 'bulletedList', 'numberedList', 'blockQuote', '|', 'undo', 'redo'],
+        heading: {
+          options: [
+            { model: 'paragraph', title: 'Paragraf', class: 'ck-heading_paragraph' },
+            { model: 'heading2', view: 'h2', title: 'Subjudul', class: 'ck-heading_heading2' },
+            { model: 'heading3', view: 'h3', title: 'Subjudul kecil', class: 'ck-heading_heading3' },
+          ],
+        },
+      });
+    } catch (err) {
+      console.error('CKEditor gagal dimuat, jatuh kembali ke textarea:', err);
+    }
+    const getBody = () => bodyEditor?.getData() ?? $('f-body').value;
+    const setBody = (html: string) =>
+      bodyEditor ? bodyEditor.setData(html) : (($('f-body') as HTMLTextAreaElement).value = html);
+
+    // ---------- Pagination ----------
+    const PAGE_SIZE = 8;
+    let page = 1;
+
+    // ---------- Modal ----------
+    const backdropEl = document.getElementById('modal-backdrop')!;
+    function openModal() {
+      if (modal.open) return;
+      modal.show();
+      backdropEl.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+    function closeModal() {
+      modal.close();
+      backdropEl.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+    document.getElementById('new-post')!.addEventListener('click', () => {
+      resetForm();
+      openModal();
+      $('f-title').focus();
+    });
+    document.getElementById('close-modal')!.addEventListener('click', closeModal);
+    backdropEl.addEventListener('click', closeModal);
+    // ESC di luar area editor = tutup; ESC di dalam editor milik CKEditor (mis. tutup balon link)
+    modal.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !(e.target as HTMLElement).closest('.ck')) closeModal();
+    });
+    modal.addEventListener('close', resetForm);
+
+    // ---------- Tab bahasa ----------
+    const tabBtns = [...document.querySelectorAll<HTMLButtonElement>('.tab-btn')];
+    const TAB_LABEL: Record<LangTab, string> = { id: 'Indonesia', en: 'English', ja: '日本語' };
+
+    function readFormInto(lang: LangTab) {
+      buffers[lang] = { title: $('f-title').value, description: $('f-desc').value, body: getBody() };
+    }
+    function loadBufIntoForm(lang: LangTab) {
+      $('f-title').value = buffers[lang].title;
+      $('f-desc').value = buffers[lang].description;
+      setBody(buffers[lang].body);
+    }
+    function refreshTabs() {
+      tabBtns.forEach((b) => {
+        const on = b.dataset.tab === activeTab;
+        b.classList.toggle('bg-white', on);
+        b.classList.toggle('shadow-sm', on);
+        b.classList.toggle('text-garden-900', on);
+        b.classList.toggle('text-ink-600', !on);
+        const t = b.dataset.tab as LangTab;
+        // Tab terjemahan butuh artikel tersimpan dulu (perlu docId)
+        b.disabled = t !== 'id' && !$('doc-id').value;
+      });
+      document.querySelectorAll<HTMLElement>('.tab-badge').forEach((el) => {
+        const t = el.dataset.badge as 'en' | 'ja';
+        el.textContent = hasTranslation[t] ? '✓' : '·';
+        el.className = `tab-badge ${hasTranslation[t] ? 'text-garden-700' : 'text-ink-400'}`;
+      });
+      if (activeTab === 'id') {
+        hintEl.textContent = $('doc-id').value
+          ? 'Menyimpan bahasa Indonesia akan menerjemahkan ulang English & 日本語 (koreksi manual di tab lain akan tertimpa).'
+          : 'Konten sumber. Setelah disimpan, English & 日本語 dibuat otomatis via AWS Translate.';
+      } else {
+        hintEl.textContent = `Koreksi manual terjemahan ${TAB_LABEL[activeTab]} — menyimpan di tab ini TIDAK mengubah bahasa lain.`;
+      }
+      hintEl.classList.remove('hidden');
+      saveBtn.textContent = `Simpan (${TAB_LABEL[activeTab]})`;
+    }
+    tabBtns.forEach((b) =>
+      b.addEventListener('click', () => {
+        const next = b.dataset.tab as LangTab;
+        if (next === activeTab) return;
+        readFormInto(activeTab);
+        activeTab = next;
+        loadBufIntoForm(activeTab);
+        refreshTabs();
+      })
+    );
+
+    // ---------- Daftar ----------
+    const CATEGORY_LABEL: Record<string, string> = { news: 'Berita', column: 'Artikel', update: 'Info' };
+    const categoryLabel = (v: string) => CATEGORY_LABEL[v] ?? v;
+    const fmtDate = (p: any) => {
+      const s = p.publishedAt?.seconds ?? p.createdAt?.seconds;
+      return s ? new Date(s * 1000).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+    };
+    const statusPill = (p: any) =>
+      p.published
+        ? '<span class="inline-block rounded-full bg-garden-100 px-2 py-0.5 text-xs font-bold text-garden-800">Terbit</span>'
+        : '<span class="inline-block rounded-full bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-700">Draft</span>';
+    const langBadges = (p: any) =>
+      `<span class="${p.translations?.en ? 'font-bold text-garden-700' : 'text-ink-400'}">EN${p.translations?.en ? '✓' : '—'}</span> ` +
+      `<span class="${p.translations?.ja ? 'font-bold text-garden-700' : 'text-ink-400'}">JA${p.translations?.ja ? '✓' : '—'}</span>`;
+    const actionBtns = (p: any) => `
+      <button data-edit="${p.id}" class="min-h-9 rounded-lg border border-washi-300 px-3 py-1.5 text-xs font-bold text-ink-700 hover:bg-washi-100">Edit</button>
+      <button data-del="${p.id}" class="min-h-9 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-50">Hapus</button>`;
+
+    function renderList() {
+      const totalPages = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
+      page = Math.min(Math.max(1, page), totalPages);
+      const start = (page - 1) * PAGE_SIZE;
+      const slice = posts.slice(start, start + PAGE_SIZE);
+
+      document.getElementById('count')!.textContent = `(${posts.length})`;
+      emptyEl.classList.toggle('hidden', posts.length > 0);
+
+      rowsEl.innerHTML = slice
+        .map(
+          (p) => `
+        <tr class="hover:bg-washi-50">
+          <td class="w-1/2 px-4 py-3">
+            <p class="line-clamp-2 font-bold text-ink-900" title="${esc(p.title)}">${esc(p.title)}</p>
+          </td>
+          <td class="px-4 py-3 whitespace-nowrap text-ink-600">${esc(categoryLabel(p.category))}</td>
+          <td class="px-4 py-3 whitespace-nowrap">${statusPill(p)}</td>
+          <td class="px-4 py-3 whitespace-nowrap text-xs">${langBadges(p)}</td>
+          <td class="px-4 py-3 whitespace-nowrap text-xs text-ink-600">${fmtDate(p)}</td>
+          <td class="px-4 py-3">
+            <div class="flex justify-end gap-2">${actionBtns(p)}</div>
+          </td>
+        </tr>`
+        )
+        .join('');
+
+      cardsEl.innerHTML = slice
+        .map(
+          (p) => `
+        <li class="p-4">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <p class="text-sm font-bold text-ink-900">${esc(p.title)}</p>
+              <p class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-ink-600">
+                ${statusPill(p)} <span>${esc(categoryLabel(p.category))}</span> · <span>${fmtDate(p)}</span> · ${langBadges(p)}
+              </p>
+            </div>
+          </div>
+          <div class="mt-3 flex gap-2">${actionBtns(p)}</div>
+        </li>`
+        )
+        .join('');
+
+      // Pager
+      pagerEl.classList.toggle('hidden', posts.length === 0);
+      pagerEl.classList.toggle('flex', posts.length > 0);
+      const shownEnd = Math.min(start + PAGE_SIZE, posts.length);
+      pagerInfo.textContent = posts.length ? `Menampilkan ${start + 1}–${shownEnd} dari ${posts.length}` : '';
+      pagerPrev.disabled = page <= 1;
+      pagerNext.disabled = page >= totalPages;
+      pagerNums.innerHTML = Array.from({ length: totalPages }, (_, i) => i + 1)
+        .map(
+          (n) =>
+            `<button data-page="${n}" class="pager-btn" ${n === page ? 'aria-current="page"' : ''} aria-label="Halaman ${n}">${n}</button>`
+        )
+        .join('');
+    }
+
+    pagerPrev.addEventListener('click', () => { page--; renderList(); });
+    pagerNext.addEventListener('click', () => { page++; renderList(); });
+    pagerNums.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-page]');
+      if (!btn) return;
+      page = Number(btn.dataset.page);
+      renderList();
+    });
+
+    async function loadList() {
+      const snap = await getDocs(col);
+      posts = snap.docs
+        .map((d) => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => (b.publishedAt?.seconds ?? 0) - (a.publishedAt?.seconds ?? 0));
+      renderList();
+    }
+
+    function resetForm() {
+      form.reset();
+      $('doc-id').value = '';
+      buffers = { id: emptyBuf(), en: emptyBuf(), ja: emptyBuf() };
+      hasTranslation = { en: false, ja: false };
+      activeTab = 'id';
+      loadBufIntoForm('id');
+      document.getElementById('form-title')!.textContent = 'Artikel baru';
+      errorEl.classList.add('hidden');
+      infoEl.classList.add('hidden');
+      refreshTabs();
+    }
+
+    // Delegasi klik untuk Edit/Hapus (tabel + kartu)
+    document.getElementById('list-wrap')!.addEventListener('click', async (e) => {
+      const btn = (e.target as HTMLElement).closest('button');
+      if (!btn) return;
+      const editId = btn.dataset.edit;
+      const delId = btn.dataset.del;
+
+      if (editId) {
+        const p = posts.find((x) => x.id === editId)!;
+        $('doc-id').value = p.id;
+        buffers = {
+          id: { title: p.title, description: p.description, body: p.body },
+          en: p.translations?.en ?? emptyBuf(),
+          ja: p.translations?.ja ?? emptyBuf(),
+        };
+        hasTranslation = { en: Boolean(p.translations?.en), ja: Boolean(p.translations?.ja) };
+        activeTab = 'id';
+        loadBufIntoForm('id');
+        $('f-category').value = p.category;
+        ($('f-published') as HTMLInputElement).checked = p.published;
+        document.getElementById('form-title')!.textContent = 'Edit artikel';
+        errorEl.classList.add('hidden');
+        infoEl.classList.add('hidden');
+        refreshTabs();
+        openModal();
+      }
+
+      if (delId) {
+        const p = posts.find((x) => x.id === delId)!;
+        if (confirm(`Hapus artikel "${p.title}" beserta semua terjemahannya? Tindakan ini tidak bisa dibatalkan.`)) {
+          await deleteDoc(doc(db!, 'news', delId));
+          await loadList();
+        }
+      }
+    });
+
+    // ---------- Simpan ----------
+    function showError(msg: string) {
+      errorEl.textContent = msg;
+      errorEl.classList.remove('hidden');
+      infoEl.classList.add('hidden');
+    }
+    function showInfo(msg: string) {
+      infoEl.textContent = msg;
+      infoEl.classList.remove('hidden');
+      errorEl.classList.add('hidden');
+    }
+
+    /** Simpan field global (kategori, status, dst.) — dipanggil tiap simpan. */
+    async function saveGlobals(id: string) {
+      const existing = posts.find((x) => x.id === id);
+      const published = ($('f-published') as HTMLInputElement).checked;
+      const data: Record<string, any> = {
+        category: $('f-category').value,
+        published,
+        updatedAt: serverTimestamp(),
+      };
+      if (published && !existing?.publishedAt) data.publishedAt = serverTimestamp();
+      await updateDoc(doc(db!, 'news', id), data);
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      readFormInto(activeTab);
+
+      // Textarea asli tersembunyi di balik CKEditor → validasi isi manual
+      if (activeTab === 'id' && !buffers.id.body.replace(/<[^>]*>|&nbsp;/g, '').trim()) {
+        showError('Isi artikel wajib diisi.');
+        return;
+      }
+
+      saveBtn.disabled = true;
+      errorEl.classList.add('hidden');
+      infoEl.classList.add('hidden');
+
+      const id = $('doc-id').value;
+
+      try {
+        if (activeTab !== 'id') {
+          // Simpan koreksi terjemahan saja
+          if (!id) throw new Error('no-doc');
+          await updateDoc(doc(db!, 'news', id), { [`translations.${activeTab}`]: buffers[activeTab], updatedAt: serverTimestamp() });
+          await saveGlobals(id);
+          hasTranslation[activeTab] = true;
+          showInfo(`Terjemahan ${TAB_LABEL[activeTab]} tersimpan.`);
+        } else if (id) {
+          // Edit konten sumber → terjemahkan ulang
+          await updateDoc(doc(db!, 'news', id), {
+            title: buffers.id.title.trim(),
+            description: buffers.id.description.trim(),
+            body: buffers.id.body.trim(),
+            updatedAt: serverTimestamp(),
+          });
+          await saveGlobals(id);
+          await runTranslation(id);
+        } else {
+          // Artikel baru: slug unik dari judul Indonesia
+          const published = ($('f-published') as HTMLInputElement).checked;
+          const base = slugify(buffers.id.title);
+          let slug = base;
+          for (let i = 2; ; i++) {
+            const clash = await getDocs(query(col, where('slug', '==', slug)));
+            if (clash.empty) break;
+            slug = `${base}-${i}`;
+          }
+          const ref = await addDoc(col, {
+            slug,
+            lang: 'id',
+            title: buffers.id.title.trim(),
+            category: $('f-category').value,
+            description: buffers.id.description.trim(),
+            body: buffers.id.body.trim(),
+            published,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+            publishedAt: published ? serverTimestamp() : null,
+          });
+          $('doc-id').value = ref.id;
+          document.getElementById('form-title')!.textContent = 'Edit artikel';
+          await runTranslation(ref.id);
+        }
+        refreshTabs();
+        await loadList();
+      } catch (err: any) {
+        console.error(err);
+        showError(`Gagal menyimpan: ${err?.code ?? err?.message ?? err}`);
+      } finally {
+        saveBtn.disabled = false;
+      }
+    });
+
+    /** Panggil endpoint AWS Translate; perbarui buffer & badge dari respons. */
+    async function runTranslation(docId: string) {
+      showInfo('Menerjemahkan ke English & 日本語 via AWS…');
+      try {
+        const token = await auth!.currentUser!.getIdToken();
+        const res = await fetch('/api/translate-news', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ docId }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showError(`Konten Indonesia tersimpan, tapi terjemahan otomatis gagal (${data.error ?? res.status}). Isi tab EN/JA manual atau coba simpan ulang.`);
+          return;
+        }
+        buffers.en = data.translations.en;
+        buffers.ja = data.translations.ja;
+        hasTranslation = { en: true, ja: true };
+        showInfo('Tersimpan + terjemahan EN/JA dibuat. Koreksi manual lewat tab bahasa bila perlu.');
+      } catch (err) {
+        console.error(err);
+        showError('Konten Indonesia tersimpan, tapi permintaan terjemahan gagal. Coba simpan ulang.');
+      }
+    }
+
+    refreshTabs();
+  </script>
+</AdminLayout>

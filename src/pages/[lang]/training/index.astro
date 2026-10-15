@@ -1,0 +1,212 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeading from '../../../components/SectionHeading.astro';
+import CTASection from '../../../components/CTASection.astro';
+import { getStaticLangPaths, type Lang } from '../../../i18n/ui';
+import imgSolo from '../../../assets/images/lpk-sukoharjo.webp';
+import imgBekasi from '../../../assets/images/office.webp';
+import imgClass from '../../../assets/images/training-center.webp';
+
+export function getStaticPaths() {
+  return getStaticLangPaths();
+}
+const lang = Astro.params.lang as Lang;
+
+const t = {
+  ja: {
+    meta: {
+      title: 'トレーニングセンター（ソロ・ブカシ）',
+      description:
+        '自社トレーニングセンター「LPK Kebun」をソロとブカシに運営。JLPT/JFT-Basic対策の日本語教育と、報連相・5S・安全衛生など日本の職場文化教育を出国前に徹底して行います。',
+    },
+    title: 'トレーニングセンター',
+    lead: '「教育を外部任せにしない」——これが当社の品質の源泉です。ソロとブカシの自社トレーニングセンター（LPK Kebun）で、日本語と日本の職場文化を出国前に徹底教育します。',
+    centers: [
+      { name: 'LPK Kebun ソロ校（スコハルジョ）', body: '中部ジャワの教育都市ソロ近郊に位置し、ジャワの勤勉な人材が多く集まる拠点です。', addr: 'Jl. Solo-Tawangmangu, Triyagan, Kec. Mojolaban, Kabupaten Sukoharjo, Jawa Tengah 57554', img: 'solo' },
+      { name: 'LPK Kebun ブカシ校', body: '首都圏の工業地帯ブカシに位置し、製造業経験者へのアクセスに優れた拠点です。', addr: 'Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, RT.003/RW.009, Margahayu, Bekasi Timur, Kota Bekasi, Jawa Barat 17113', img: 'bekasi' },
+    ],
+    curriculum: {
+      title: 'カリキュラム',
+      subtitle: '「試験に受かる」だけでなく「現場で通用する」ことをゴールに設計しています。',
+      items: [
+        { title: '日本語教育（JLPT N5→N4 / JFT-Basic）', body: '文法・語彙に加え、現場で使う指示・報告表現を重点的に訓練。試験合格と実務コミュニケーションの両立を目指します。' },
+        { title: '日本の職場文化', body: '報連相、5S、時間厳守、挨拶、チームワーク。日本の職場で「信頼される振る舞い」を、演習を通じて体得します。' },
+        { title: '安全衛生・生活教育', body: '労働安全の基礎、日本での生活ルール（ゴミ出し・交通・行政手続き）、金銭管理まで。生活の安定が就労の安定をつくります。' },
+        { title: '分野別準備', body: '介護・製造・外食など、配属予定分野に応じた専門用語と技能試験対策を行います。' },
+      ],
+    },
+    schedule: {
+      title: '1日のスケジュール例',
+      rows: [
+        ['07:30', '朝礼・ラジオ体操・日本語での挨拶練習'],
+        ['08:00', '日本語授業（文法・語彙・聴解）'],
+        ['12:00', '昼食・休憩'],
+        ['13:00', '日本語会話演習／職場文化トレーニング'],
+        ['15:30', '分野別学習・試験対策'],
+        ['17:00', '清掃（5S実践）・終礼'],
+      ],
+      note: 'スケジュールはコース・時期により異なります。',
+    },
+    photoAlt: '日本語の授業風景',
+    license: '※ LPK Kebunは職業訓練機関として正式な許可を取得しています（許可番号：569/01/DPMPTSP-PPJU）。',
+  },
+  id: {
+    meta: {
+      title: 'Training Center LPK Kebun — Solo & Bekasi',
+      description:
+        'Training center milik sendiri di Solo dan Bekasi: belajar bahasa Jepang (JLPT N4/JFT-Basic) dan budaya kerja Jepang (horenso, 5S, disiplin) sampai benar-benar siap berangkat.',
+    },
+    title: 'Training Center LPK Kebun',
+    lead: 'Sebelum berangkat, kamu digembleng dulu di training center milik kami sendiri — bukan dititipkan ke lembaga lain. Di sinilah bedanya lulusan Kebun: sampai di Jepang sudah tahu cara kerja, cara bicara, dan cara hidupnya.',
+    centers: [
+      { name: 'LPK Kebun Solo (Sukoharjo)', body: 'Berlokasi di kawasan Solo Raya, Jawa Tengah — dekat dengan komunitas pekerja yang dikenal ulet dan disiplin.', addr: 'Jl. Solo-Tawangmangu, Triyagan, Kec. Mojolaban, Kabupaten Sukoharjo, Jawa Tengah 57554', img: 'solo' },
+      { name: 'LPK Kebun Bekasi', body: 'Berlokasi di kawasan industri Bekasi, cocok untuk kamu yang berada di Jabodetabek atau punya pengalaman pabrik.', addr: 'Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, RT.003/RW.009, Margahayu, Bekasi Timur, Kota Bekasi, Jawa Barat 17113', img: 'bekasi' },
+    ],
+    curriculum: {
+      title: 'Apa yang kamu pelajari',
+      subtitle: 'Targetnya bukan cuma lulus ujian — tapi benar-benar siap bekerja dan hidup di Jepang.',
+      items: [
+        { title: 'Bahasa Jepang (target N4 / JFT-Basic)', body: 'Dari nol sampai lulus ujian: tata bahasa, kosakata, plus latihan percakapan kerja — cara menerima perintah, melapor, dan bertanya di tempat kerja.' },
+        { title: 'Budaya kerja Jepang', body: 'Horenso (lapor-informasikan-konsultasi), 5S, tepat waktu, salam, kerja tim. Hal-hal yang membuat kamu dipercaya atasan Jepang.' },
+        { title: 'Keselamatan kerja & hidup di Jepang', body: 'Dasar keselamatan kerja, aturan hidup sehari-hari (buang sampah, transportasi, urusan administrasi), sampai mengelola gaji.' },
+        { title: 'Persiapan bidang kerja', body: 'Istilah dan latihan tes keterampilan sesuai bidangmu: kaigo, manufaktur, pengolahan makanan, dan lainnya.' },
+      ],
+    },
+    schedule: {
+      title: 'Contoh jadwal harian',
+      rows: [
+        ['07.30', 'Apel pagi, senam, latihan salam bahasa Jepang'],
+        ['08.00', 'Kelas bahasa Jepang (tata bahasa, kosakata, mendengarkan)'],
+        ['12.00', 'Istirahat & makan siang'],
+        ['13.00', 'Latihan percakapan / budaya kerja Jepang'],
+        ['15.30', 'Belajar bidang kerja & persiapan ujian'],
+        ['17.00', 'Bersih-bersih (praktik 5S) & apel sore'],
+      ],
+      note: 'Jadwal bisa berbeda tergantung program dan angkatan.',
+    },
+    photoAlt: 'Suasana kelas bahasa Jepang di LPK Kebun',
+    license: 'LPK Kebun beroperasi dengan izin resmi lembaga pelatihan kerja — No. izin: 569/01/DPMPTSP-PPJU.',
+  },
+  en: {
+    meta: {
+      title: 'Training Centers — Solo & Bekasi',
+      description:
+        'Our own training centers (LPK Kebun) in Solo and Bekasi: Japanese language up to JLPT N4/JFT-Basic plus Japanese workplace culture, taught before departure.',
+    },
+    title: 'Our Training Centers',
+    lead: 'We never outsource education — it is the source of our quality. At LPK Kebun in Solo and Bekasi, candidates master Japanese language and workplace culture before departure.',
+    centers: [
+      { name: 'LPK Kebun Solo (Sukoharjo)', body: 'In the Solo region of Central Java, close to communities known for diligent, disciplined workers.', addr: 'Jl. Solo-Tawangmangu, Triyagan, Kec. Mojolaban, Kabupaten Sukoharjo, Jawa Tengah 57554', img: 'solo' },
+      { name: 'LPK Kebun Bekasi', body: 'In the industrial Bekasi area near Jakarta, with strong access to candidates with factory experience.', addr: 'Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, RT.003/RW.009, Margahayu, Bekasi Timur, Kota Bekasi, Jawa Barat 17113', img: 'bekasi' },
+    ],
+    curriculum: {
+      title: 'Curriculum',
+      subtitle: 'Designed not just to pass exams, but to perform at the workplace.',
+      items: [
+        { title: 'Japanese (JLPT N5→N4 / JFT-Basic)', body: 'Grammar and vocabulary plus practical workplace communication: instructions, reporting, asking questions.' },
+        { title: 'Japanese workplace culture', body: 'Horenso, 5S, punctuality, greetings and teamwork — the behaviors that earn trust in Japanese workplaces.' },
+        { title: 'Safety & life skills', body: 'Occupational safety basics and daily life in Japan: waste rules, transport, paperwork, money management.' },
+        { title: 'Industry preparation', body: 'Terminology and skills-test preparation for each candidate’s target industry.' },
+      ],
+    },
+    schedule: {
+      title: 'Sample daily schedule',
+      rows: [
+        ['07:30', 'Morning assembly, exercise, greeting practice'],
+        ['08:00', 'Japanese class (grammar, vocabulary, listening)'],
+        ['12:00', 'Lunch break'],
+        ['13:00', 'Conversation practice / workplace culture training'],
+        ['15:30', 'Industry study & exam preparation'],
+        ['17:00', 'Cleaning (5S practice) & closing assembly'],
+      ],
+      note: 'Schedules vary by course and cohort.',
+    },
+    photoAlt: 'Japanese language class at LPK Kebun',
+    license: 'LPK Kebun operates under an official vocational training license — no. 569/01/DPMPTSP-PPJU.',
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} path="/training/">
+  <section class="bg-garden-900">
+    <div class="container-site py-14 lg:py-18">
+      <p class="eyebrow !text-garden-300">Training Centers</p>
+      <h1 class="mt-2 text-3xl font-extrabold text-white sm:text-4xl">{t.title}</h1>
+      <p class="mt-5 max-w-3xl leading-relaxed text-garden-100">{t.lead}</p>
+    </div>
+  </section>
+
+  {/* ===== 2 lokasi ===== */}
+  <section class="bg-washi-50">
+    <div class="container-site py-14 lg:py-18">
+      <div class="grid gap-6 md:grid-cols-2">
+        {
+          t.centers.map((center) => (
+            <div class="card overflow-hidden !p-0">
+              {/* FOTO: gedung & kelas LPK Kebun di masing-masing lokasi */}
+              <Image src={center.img === 'solo' ? imgSolo : imgBekasi} alt={center.name} class="h-48 w-full object-cover" />
+              <div class="p-6">
+                <h2 class="text-lg font-bold text-garden-900">{center.name}</h2>
+                <p class="mt-2 text-sm leading-relaxed text-ink-600">{center.body}</p>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(center.name + ', ' + center.addr)}`}
+                  target="_blank"
+                  rel="noopener"
+                  class="mt-3 flex items-start gap-1.5 text-xs text-ink-400 underline-offset-2 hover:text-garden-700 hover:underline"
+                >
+                  <svg class="mt-0.5 shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 21s-7-5.5-7-11a7 7 0 0 1 14 0c0 5.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                  {center.addr}
+                </a>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+      <p class="mt-6 text-center text-xs text-ink-600">{t.license}</p>
+    </div>
+  </section>
+
+  {/* ===== Kurikulum ===== */}
+  <section class="bg-white">
+    <div class="container-site py-14 lg:py-18">
+      <SectionHeading title={t.curriculum.title} subtitle={t.curriculum.subtitle} />
+      <div class="mt-10 grid gap-6 md:grid-cols-2">
+        {
+          t.curriculum.items.map((item) => (
+            <div class="card">
+              <h3 class="text-lg font-bold text-garden-900">{item.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      {/* FOTO: kelas bahasa Jepang di training center */}
+      <Image src={imgClass} alt={t.photoAlt} class="mx-auto mt-10 h-56 w-full max-w-3xl rounded-2xl border border-washi-200 object-cover" />
+    </div>
+  </section>
+
+  {/* ===== Jadwal ===== */}
+  <section class="bg-garden-50">
+    <div class="container-site py-14 lg:py-18">
+      <h2 class="text-center text-2xl font-bold text-garden-900 sm:text-3xl">{t.schedule.title}</h2>
+      <div class="mx-auto mt-8 max-w-2xl overflow-hidden rounded-2xl border border-washi-200 bg-white">
+        <table class="w-full text-sm">
+          <tbody>
+            {
+              t.schedule.rows.map(([time, activity], i) => (
+                <tr class={i % 2 === 0 ? 'bg-washi-50' : 'bg-white'}>
+                  <th scope="row" class="w-24 px-4 py-3 text-left font-bold text-garden-800 sm:px-6">{time}</th>
+                  <td class="px-4 py-3 text-ink-700 sm:px-6">{activity}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-center text-xs text-ink-400">{t.schedule.note}</p>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>

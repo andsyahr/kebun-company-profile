@@ -1,0 +1,486 @@
+---
+import { Image } from 'astro:assets'
+import BaseLayout from '../../../layouts/BaseLayout.astro'
+import BridgeArc from '../../../components/BridgeArc.astro'
+import SectionHeading from '../../../components/SectionHeading.astro'
+import { getStaticLangPaths, type Lang } from '../../../i18n/ui'
+import imgInterview from '../../../assets/images/mensetsu-online.webp'
+import imgArrival from '../../../assets/images/keberangkatan.webp'
+
+export function getStaticPaths() {
+  return getStaticLangPaths()
+}
+const lang = Astro.params.lang as Lang
+
+const t = {
+  ja: {
+    meta: {
+      title: '企業の皆さまへ｜インドネシア人材の受け入れ支援',
+      description:
+        '特定技能・育成就労・技能実習に対応したインドネシア人材紹介。面接から教育、ビザ、入国、定着支援までワンストップ。政府認定P3MIと名古屋のグループ会社による両国一貫体制。無料相談受付中。'
+    },
+    hero: {
+      eyebrow: 'For Companies',
+      title: '日本企業の皆さまへ',
+      lead: '「紹介して終わり」の送り出し機関ではありません。インドネシア政府認定のP3MIとして、また名古屋に拠点を置くグループ会社ANCジャパン（有料職業紹介・登録支援機関）とともに、面接から定着支援まで両国で一貫してご支援いたします。受入企業様・監理団体様・登録支援機関様、いずれからのご相談も歓迎いたします。',
+      cta: '無料相談はこちら'
+    },
+    why: {
+      title: 'インドネシア人材が選ばれる理由',
+      items: [
+        {
+          title: '若く豊富な労働力',
+          body: '平均年齢約30歳、人口2億7,000万人超。日本で働きたい意欲の高い若年層が厚く、長期的な採用計画を立てやすい国です。'
+        },
+        {
+          title: '親日的で穏やかな国民性',
+          body: '対日感情が良好で、協調性を重んじる文化があります。職場への順応が早く、チームでの就労に強みがあります。'
+        },
+        {
+          title: '教育次第で大きく伸びる',
+          body: '当社はトレーニングセンターでの日本語・職場文化教育を自社で行うため、配属後の立ち上がりの速さに直結します。'
+        }
+      ]
+    },
+    flow: {
+      title: '受け入れの流れ',
+      subtitle:
+        'ご相談から入国後の定着支援まで、標準的な流れをご紹介します。所要期間は在留資格・分野により異なりますので、個別にご案内いたします。',
+      steps: [
+        {
+          title: '無料相談・要件ヒアリング',
+          body: '募集職種、人数、時期、求める日本語レベルなどを伺い、最適な在留資格と採用プランをご提案します。'
+        },
+        {
+          title: '候補者選定・面接',
+          body: '提携大学やSMK（インドネシアの職業高校）、自社トレーニングセンターの人材プールから、職種・在留資格に合った候補者を選定。オンライン面接のほか、ご希望に応じて現地面接も手配します。'
+        },
+        {
+          title: '教育・訓練',
+          body: '内定後、ソロ・ブカシのトレーニングセンターで日本語（JLPT/JFT-Basic）と日本の職場文化（報連相・5S・安全衛生）を集中教育します。'
+        },
+        {
+          title: 'ビザ申請・入国手続き',
+          body: '在留資格認定証明書の申請から入国までの手続きを、日本側グループと連携してサポートします。'
+        },
+        {
+          title: '入国・配属',
+          body: '空港出迎え、住居・ライフライン・行政手続きのサポートなど、就労開始までの立ち上げを支援します。'
+        },
+        {
+          title: '定着支援',
+          body: '登録支援機関であるグループ会社ANCジャパンによる定期面談・生活相談・母国語サポートで、長期定着を支えます。'
+        }
+      ]
+    },
+    pricing: {
+      title: '費用について',
+      body: '費用は在留資格・分野・人数・教育内容により異なるため、ヒアリングのうえ、内訳を明示したお見積りを個別にご提示しています。「後から想定外の費用が発生した」ということがないよう、契約前にすべての費用項目をご説明することをお約束します。',
+      cta: 'お見積り・ご相談（無料）'
+    },
+    compliance: {
+      title: 'コンプライアンス・倫理的採用',
+      items: [
+        '労働者からの不当な手数料徴収を排除した、透明性のある採用プロセス（エシカル・リクルートメント）を徹底しています。',
+        'インドネシア労働省認定P3MIとして、同国の海外労働者保護法制に準拠した送り出しを行います。',
+        '日本側では、グループ会社が有料職業紹介事業者・登録支援機関として関連法令を遵守し、支援計画に基づく支援を実施します。',
+        'ブローカー・仲介業者を介さない直接採用ルートにより、候補者情報の正確性とプロセスの透明性を担保します。'
+      ]
+    },
+    faq: {
+      title: 'よくあるご質問',
+      items: [
+        {
+          q: '面接から入国までどのくらいかかりますか？',
+          a: '在留資格や分野、候補者の日本語レベルによって異なりますが、特定技能の場合は一般的に数か月程度を見込みます。個別の条件を伺ったうえで、現実的なスケジュールをご提示します。'
+        },
+        {
+          q: '日本語レベルはどの程度ですか？',
+          a: '特定技能ではJLPT N4相当（またはJFT-Basic合格）が基準です。当社トレーニングセンターで出国前教育を行うため、配属後すぐに現場コミュニケーションが取れる水準を目指して教育しています。'
+        },
+        {
+          q: 'どの分野に対応していますか？',
+          a: '介護、外食業、飲食料品製造業、建設、農業、宿泊など特定技能の主要分野に対応しています。分野ごとの受け入れ可否は個別にご確認ください。'
+        },
+        {
+          q: '既に監理団体・登録支援機関と提携しています。併用できますか？',
+          a: 'はい。送り出し機関としてのみのご利用も可能です。既存の体制を尊重しつつ、インドネシア側の人材供給・教育を担います。'
+        },
+        {
+          q: '入国後のトラブル対応はどうなりますか？',
+          a: '名古屋のグループ会社ANCジャパンがインドネシア語ネイティブのスタッフによる相談窓口を持ち、生活・就労上の問題に両言語で対応します。'
+        },
+        {
+          q: '育成就労制度への移行はどう対応しますか？',
+          a: '技能実習からの制度移行を見据え、新制度の要件に沿った送り出し・教育体制を準備しています。最新の情報にもとづき、移行期の受け入れ設計をご一緒に検討します。'
+        }
+      ]
+    },
+    cta: {
+      title: 'まずは無料相談から',
+      body: '「何から始めればよいか分からない」という段階でも構いません。貴社の状況を伺い、最適な受け入れ方法をご提案いたします。',
+      button: '無料相談を申し込む'
+    }
+  },
+  id: {
+    meta: {
+      title: 'Untuk Perusahaan Jepang',
+      description:
+        'Penyaluran tenaga kerja Indonesia untuk perusahaan Jepang: SSW, magang teknis, dan Ikusei Shuro. Didukung P3MI berizin dan grup di Nagoya. Halaman lengkap tersedia dalam bahasa Jepang.'
+    },
+    hero: {
+      eyebrow: 'Untuk Perusahaan',
+      title: 'Layanan untuk Perusahaan Jepang',
+      lead: 'Halaman ini terutama ditujukan bagi perusahaan Jepang (tersedia lengkap dalam bahasa Jepang). Kami menyalurkan tenaga kerja Indonesia melalui program SSW, magang teknis, dan Ikusei Shuro, dengan dukungan penuh dari konsultasi awal sampai pendampingan setelah penempatan.',
+      cta: 'Buka versi bahasa Jepang'
+    },
+    why: {
+      title: 'Yang kami tawarkan ke perusahaan Jepang',
+      items: [
+        {
+          title: 'Kandidat terlatih',
+          body: 'Kandidat dididik bahasa Jepang dan budaya kerja di training center kami di Solo & Bekasi sebelum berangkat.'
+        },
+        {
+          title: 'Proses legal dan transparan',
+          body: 'Sebagai P3MI berizin, seluruh proses mengikuti regulasi Indonesia dan Jepang, tanpa broker.'
+        },
+        {
+          title: 'Dukungan dua negara',
+          body: 'Grup kami ANC Japan di Nagoya mendampingi pekerja dan perusahaan setelah penempatan.'
+        }
+      ]
+    },
+    flow: {
+      title: 'Alur kerja sama',
+      subtitle: 'Gambaran singkat — detail lengkap ada di versi bahasa Jepang.',
+      steps: [
+        {
+          title: 'Konsultasi',
+          body: 'Diskusi kebutuhan posisi, jumlah, dan jadwal.'
+        },
+        {
+          title: 'Seleksi & wawancara',
+          body: 'Kandidat dari mitra universitas, SMK, dan training center — disesuaikan dengan posisi dan jenis visa.'
+        },
+        {
+          title: 'Pelatihan',
+          body: 'Bahasa Jepang dan budaya kerja di LPK Kebun.'
+        },
+        {
+          title: 'Visa',
+          body: 'Pengurusan dokumen keimigrasian kedua negara.'
+        },
+        {
+          title: 'Keberangkatan',
+          body: 'Penjemputan dan penempatan di Jepang.'
+        },
+        {
+          title: 'Pendampingan',
+          body: 'Dukungan berkelanjutan oleh tim di Jepang.'
+        }
+      ]
+    },
+    pricing: {
+      title: 'Biaya',
+      body: 'Struktur biaya dijelaskan secara transparan sebelum kontrak, disesuaikan dengan program dan kebutuhan. Silakan hubungi kami untuk penawaran.',
+      cta: 'Hubungi kami'
+    },
+    compliance: {
+      title: 'Kepatuhan & rekrutmen etis',
+      items: [
+        'Tanpa pungutan liar kepada pekerja — proses rekrutmen etis dan transparan.',
+        'Patuh pada regulasi pelindungan pekerja migran Indonesia (UU PPMI).',
+        'Grup di Jepang berlisensi resmi untuk penyaluran dan pendampingan.',
+        'Jalur rekrutmen langsung tanpa calo atau perantara.'
+      ]
+    },
+    faq: { title: 'FAQ', items: [] },
+    cta: {
+      title: 'Konsultasi gratis',
+      body: 'Tim kami siap berdiskusi dalam bahasa Jepang, Indonesia, atau Inggris.',
+      button: 'Hubungi Kami'
+    }
+  },
+  en: {
+    meta: {
+      title: 'For Japanese Companies — Hire Indonesian Talent',
+      description:
+        'End-to-end hiring of Indonesian workers for Japanese companies: SSW, technical intern and Ikusei Shuro programs. Licensed P3MI in Indonesia, licensed group company in Nagoya. Free consultation.'
+    },
+    hero: {
+      eyebrow: 'For Companies',
+      title: 'Hire Indonesian Talent, End to End',
+      lead: 'We are not a "place and forget" sending organization. As a licensed P3MI with a Nagoya-based group company (licensed job placement & registered support organization), we support you from interviews through visa, arrival and long-term retention — on both sides of the bridge.',
+      cta: 'Free consultation'
+    },
+    why: {
+      title: 'Why Indonesian talent',
+      items: [
+        {
+          title: 'Young, deep workforce',
+          body: 'A population of 270+ million with an average age around 30 — a reliable long-term talent pool with strong motivation to work in Japan.'
+        },
+        {
+          title: 'Culturally compatible',
+          body: 'Pro-Japan sentiment and a cooperative work culture translate into fast adaptation and strong teamwork.'
+        },
+        {
+          title: 'Trained by us, not outsourced',
+          body: 'Language and workplace-culture training happens at our own centers, which shows in how quickly workers become productive.'
+        }
+      ]
+    },
+    flow: {
+      title: 'How the process works',
+      subtitle:
+        'Typical flow from first consultation to retention support. Timelines vary by visa category and industry.',
+      steps: [
+        {
+          title: 'Consultation',
+          body: 'We hear your requirements — roles, headcount, timing, language level.'
+        },
+        {
+          title: 'Selection & interviews',
+          body: 'Candidates matched to the role and visa category, drawn from partner universities, SMK vocational schools and our training centers; online or on-site interviews.'
+        },
+        {
+          title: 'Training',
+          body: 'Intensive Japanese and workplace-culture training at our Solo & Bekasi centers.'
+        },
+        {
+          title: 'Visa & immigration',
+          body: 'Certificate of Eligibility and departure procedures handled with our Japan-side group.'
+        },
+        {
+          title: 'Arrival & placement',
+          body: 'Airport pickup, housing and administrative setup until day one on the job.'
+        },
+        {
+          title: 'Retention support',
+          body: 'Ongoing check-ins and native-language support through ANC Japan in Nagoya.'
+        }
+      ]
+    },
+    pricing: {
+      title: 'Pricing',
+      body: 'Costs depend on visa category, industry, headcount and training scope. We provide itemized quotes up front — every cost item explained before you sign.',
+      cta: 'Request a quote'
+    },
+    compliance: {
+      title: 'Compliance & ethical recruitment',
+      items: [
+        'Ethical recruitment: no illegal fees charged to workers, transparent processes throughout.',
+        'Full compliance with Indonesia’s migrant worker protection law as a licensed P3MI.',
+        'Japan-side compliance through our licensed group company (paid job placement & registered support organization).',
+        'Direct recruitment channels — no brokers or middlemen.'
+      ]
+    },
+    faq: {
+      title: 'FAQ',
+      items: [
+        {
+          q: 'How long from interview to arrival?',
+          a: 'It varies by visa category and candidate readiness; for SSW, plan for several months. We give you a realistic schedule after the first consultation.'
+        },
+        {
+          q: 'What Japanese level can we expect?',
+          a: 'SSW requires JLPT N4 equivalent or JFT-Basic. Our pre-departure training targets practical workplace communication from day one.'
+        },
+        {
+          q: 'Which industries do you cover?',
+          a: 'Care, food service, food manufacturing, construction, agriculture, hospitality and other major SSW fields — ask us about your specific industry.'
+        },
+        {
+          q: 'Can we keep our existing kanri dantai / support organization?',
+          a: 'Yes. You can use us purely as the sending organization on the Indonesian side.'
+        }
+      ]
+    },
+    cta: {
+      title: 'Start with a free consultation',
+      body: 'Even if you are at the "where do we start" stage — tell us your situation and we will map the options.',
+      button: 'Contact us'
+    }
+  }
+}[lang]
+
+const contactHref = lang === 'id' ? '/ja/for-companies/' : `/${lang}/contact/`
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.meta.title}
+  description={t.meta.description}
+  path="/for-companies/"
+>
+  {/* ===== Hero ===== */}
+  <section class="bg-garden-900">
+    <div class="container-site py-16 lg:py-20">
+      <div class="max-w-3xl">
+        <p class="eyebrow !text-garden-300">{t.hero.eyebrow}</p>
+        <h1 class="mt-2 text-3xl font-extrabold text-white sm:text-4xl">
+          {t.hero.title}
+        </h1>
+        <p class="mt-6 leading-relaxed text-garden-100">{t.hero.lead}</p>
+        <a href={contactHref} class="btn-primary mt-8">{t.hero.cta}</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Keunggulan pekerja Indonesia ===== */}
+  <section class="bg-washi-50">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading title={t.why.title} />
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        {
+          t.why.items.map((item) => (
+            <div class="card">
+              <h3 class="text-lg font-bold text-garden-900">{item.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">
+                {item.body}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Alur (面接→教育→ビザ→入国→定着支援) ===== */}
+  <section class="bg-white">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading title={t.flow.title} subtitle={t.flow.subtitle} />
+      <ol
+        class="relative mx-auto mt-12 max-w-3xl space-y-8 border-l-2 border-garden-700 pl-8"
+      >
+        {
+          t.flow.steps.map((step, i) => (
+            <li class="relative">
+              <span class="absolute -left-[49px] flex h-8 w-8 items-center justify-center rounded-full bg-garden-700 text-sm font-bold text-white">
+                {i + 1}
+              </span>
+              <h3 class="font-bold text-garden-900">{step.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-ink-600">
+                {step.body}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
+        {/* FOTO: sesi wawancara online kandidat dengan perusahaan Jepang */}
+        <Image
+          src={imgInterview}
+          alt={lang === 'ja'
+            ? 'オンライン面接の様子'
+            : lang === 'id'
+              ? 'Sesi wawancara online kandidat dengan perusahaan Jepang'
+              : 'Online interview between a candidate and a Japanese employer'}
+          class="h-44 w-full rounded-2xl border border-washi-200 object-cover"
+        />
+        {/* FOTO: penyambutan pekerja di bandara Jepang */}
+        <Image
+          src={imgArrival}
+          alt={lang === 'ja'
+            ? '日本の空港での出迎えの様子'
+            : lang === 'id'
+              ? 'Penyambutan pekerja Indonesia di bandara Jepang'
+              : 'Welcoming Indonesian workers at a Japanese airport'}
+          class="h-44 w-full rounded-2xl border border-washi-200 object-cover"
+        />
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Biaya transparan ===== */}
+  <section class="bg-garden-50">
+    <div class="container-site py-16 lg:py-20">
+      <div class="mx-auto max-w-3xl text-center">
+        <h2 class="text-2xl font-bold text-garden-900 sm:text-3xl">
+          {t.pricing.title}
+        </h2>
+        <p class="mt-5 leading-relaxed text-ink-600">{t.pricing.body}</p>
+        <a href={contactHref} class="btn-primary mt-7">{t.pricing.cta}</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Compliance ===== */}
+  <section class="bg-white">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading title={t.compliance.title} />
+      <ul class="mx-auto mt-8 max-w-3xl space-y-4">
+        {
+          t.compliance.items.map((item) => (
+            <li class="flex items-start gap-3 rounded-xl bg-washi-50 p-4">
+              <svg
+                class="mt-0.5 shrink-0"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="var(--color-garden-600)"
+                stroke-width="2.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              <span class="text-sm leading-relaxed text-ink-700">{item}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {/* ===== FAQ ===== */}
+  {
+    t.faq.items.length > 0 && (
+      <section class="bg-washi-50">
+        <div class="container-site py-16 lg:py-20">
+          <SectionHeading title={t.faq.title} />
+          <div class="mx-auto mt-8 max-w-3xl space-y-3">
+            {t.faq.items.map((item) => (
+              <details class="group card !p-0">
+                <summary class="flex cursor-pointer items-center justify-between gap-4 p-5 font-bold text-ink-900 [&::-webkit-details-marker]:hidden">
+                  {item.q}
+                  <svg
+                    class="shrink-0 transition-transform group-open:rotate-180"
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    aria-hidden="true"
+                  >
+                    <path d="m6 9 6 6 6-6" />
+                  </svg>
+                </summary>
+                <p class="border-t border-washi-200 p-5 text-sm leading-relaxed text-ink-600">
+                  {item.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {/* ===== CTA akhir ===== */}
+  <section class="bg-garden-900">
+    <div class="container-site py-16 text-center lg:py-20">
+      <h2 class="text-2xl font-bold text-white sm:text-3xl">{t.cta.title}</h2>
+      <BridgeArc variant="divider" class="mt-2 opacity-50" />
+      <p class="mx-auto mt-4 max-w-xl leading-relaxed text-garden-200">
+        {t.cta.body}
+      </p>
+      <a href={contactHref} class="btn-primary mt-8">{t.cta.button}</a>
+    </div>
+  </section>
+</BaseLayout>

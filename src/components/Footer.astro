@@ -1,0 +1,169 @@
+---
+import { Image } from 'astro:assets'
+import logoKti from '../assets/kebuntech-alt.png'
+import { useUI, type Lang } from '../i18n/ui'
+import BridgeArc from './BridgeArc.astro'
+
+interface Props {
+  lang: Lang
+}
+const { lang } = Astro.props
+const t = useUI(lang)
+const year = new Date().getFullYear()
+
+const columns = [
+  {
+    title: t.nav.services,
+    links: [
+      {
+        href: `/${lang}/services/ssw/`,
+        label:
+          lang === 'ja'
+            ? '特定技能（SSW）'
+            : lang === 'id'
+              ? 'Tokutei Ginou (SSW)'
+              : 'Specified Skilled Worker'
+      },
+      {
+        href: `/${lang}/services/ginou-jisshu/`,
+        label:
+          lang === 'ja'
+            ? '技能実習・育成就労'
+            : lang === 'id'
+              ? 'Magang Teknis & Ikusei Shuro'
+              : 'TITP & Ikusei Shuro'
+      },
+      {
+        href: `/${lang}/services/consulting/`,
+        label:
+          lang === 'ja'
+            ? 'ビジネスコンサルティング'
+            : lang === 'id'
+              ? 'Konsultasi Bisnis'
+              : 'Business Consulting'
+      },
+      { href: `/${lang}/training/`, label: t.nav.training }
+    ]
+  },
+  {
+    title:
+      lang === 'ja' ? '会社情報' : lang === 'id' ? 'Perusahaan' : 'Company',
+    links: [
+      { href: `/${lang}/company/`, label: t.nav.company },
+      { href: `/${lang}/for-companies/`, label: t.nav.forCompanies },
+      { href: `/${lang}/for-candidates/`, label: t.nav.forCandidates },
+      { href: `/${lang}/news/`, label: t.nav.news },
+      { href: `/${lang}/contact/`, label: t.nav.contact }
+    ]
+  }
+]
+---
+
+<footer class="bg-garden-950 text-garden-100">
+  <div class="container-site py-12 lg:py-16">
+    <div class="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
+      <div>
+        <Image
+          src={logoKti}
+          alt="PT Kebun Teknologi Indonesia"
+          class="h-10 w-auto"
+          densities={[1, 2]}
+        />
+
+        <p class="mt-4 max-w-sm text-sm leading-relaxed text-garden-200">
+          {t.footer.description}
+        </p>
+      </div>
+
+      {
+        columns.map((col) => (
+          <nav aria-label={col.title}>
+            <h2 class="text-sm font-bold tracking-wide text-white">
+              {col.title}
+            </h2>
+            <ul class="mt-4 space-y-2.5">
+              {col.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-sm text-garden-200 transition-colors hover:text-white"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))
+      }
+
+      <div>
+        <h2 class="text-sm font-bold tracking-wide text-white">
+          {t.footer.licenseTitle}
+        </h2>
+        <ul class="mt-4 space-y-2.5 text-sm text-garden-200">
+          <li>{t.footer.licenseP3MI}</li>
+          <li>{t.footer.licenseSO}</li>
+          <li>{t.footer.licenseGroupJp}</li>
+        </ul>
+        <h2 class="mt-6 text-sm font-bold tracking-wide text-white">
+          {t.footer.groupTitle}
+        </h2>
+        <p class="mt-3 text-sm">
+          <a
+            href="https://anc-japan.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-1 text-garden-200 underline underline-offset-2 transition-colors hover:text-white"
+          >
+            {t.footer.groupAnc}
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"></path></svg
+            >
+          </a>
+        </p>
+        <h2 class="mt-6 text-sm font-bold tracking-wide text-white">
+          {t.footer.contactTitle}
+        </h2>
+        <ul class="mt-3 space-y-1.5 text-sm text-garden-200">
+          <li>
+            Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu, Bekasi
+            Timur, West Java 17113, Indonesia
+          </li>
+          <li>
+            <a
+              href="mailto:business@kebun.tech"
+              class="underline underline-offset-2 transition-colors hover:text-white"
+              >business@kebun.tech</a
+            >
+          </li>
+          <li>
+            WhatsApp:
+            <a
+              href="https://wa.me/6281903353533"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline underline-offset-2 transition-colors hover:text-white"
+              >+62 819 0335 3533</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <BridgeArc variant="divider" class="mt-10 opacity-40" />
+
+    <div
+      class="mt-4 flex flex-col items-center justify-between gap-3 border-t border-garden-800 pt-6 text-xs text-garden-300 sm:flex-row"
+    >
+      <p>© {year} PT Kebun Teknologi Indonesia. {t.footer.rights}</p>
+      <p lang="ja">インドネシアと日本を、人でつなぐ。</p>
+    </div>
+  </div>
+</footer>

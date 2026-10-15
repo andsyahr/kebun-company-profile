@@ -1,0 +1,90 @@
+---
+/**
+ * Blok CTA ganda di bagian bawah halaman:
+ * kiri = perusahaan Jepang (無料相談), kanan = kandidat (daftar/WhatsApp).
+ */
+import type { Lang } from '../i18n/ui';
+import BridgeArc from './BridgeArc.astro';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+
+const t = {
+  ja: {
+    heading: 'まずはお気軽にご相談ください',
+    companies: {
+      title: '日本企業の皆さまへ',
+      body: '特定技能・育成就労の受け入れをご検討中の企業様、監理団体・登録支援機関の皆さま。貴社の状況に合わせて最適なプランをご提案いたします。',
+      cta: '無料相談はこちら',
+      href: '/ja/contact/',
+    },
+    candidates: {
+      title: 'インドネシア人求職者の方へ',
+      sub: 'Untuk calon pekerja Indonesia',
+      body: 'Ingin bekerja di Jepang secara resmi dan aman? Daftar sekarang, tim kami siap membantu dari nol.',
+      cta: 'Daftar / Tanya via WhatsApp',
+      href: 'https://wa.me/6281903353533',
+    },
+  },
+  id: {
+    heading: 'Siap melangkah ke Jepang?',
+    companies: {
+      title: '日本企業の皆さまへ',
+      body: '特定技能・育成就労の受け入れをご検討中の企業様は、こちらから無料相談をご利用ください。',
+      cta: '無料相談はこちら',
+      href: '/ja/contact/',
+    },
+    candidates: {
+      title: 'Untuk Calon Pekerja',
+      sub: 'Resmi, aman, tanpa calo',
+      body: 'Konsultasi gratis dulu juga boleh. Tim kami akan menjelaskan program, syarat, dan biaya secara terbuka — tanpa janji manis yang tidak jelas.',
+      cta: 'Daftar / Tanya via WhatsApp',
+      href: 'https://wa.me/6281903353533',
+    },
+  },
+  en: {
+    heading: 'Let’s build the bridge together',
+    companies: {
+      title: 'For Japanese companies',
+      body: 'Considering hiring Indonesian talent under the SSW or Ikusei Shuro programs? Talk to us — consultation is free.',
+      cta: 'Free consultation',
+      href: '/en/contact/',
+    },
+    candidates: {
+      title: 'For Indonesian candidates',
+      sub: 'Official, safe, no brokers',
+      body: 'Want to work in Japan through official channels? Register now and our team will guide you from day one.',
+      cta: 'Register via WhatsApp',
+      href: 'https://wa.me/6281903353533',
+    },
+  },
+}[lang];
+---
+
+<section class="bg-washi-100">
+  <div class="container-site py-16 lg:py-20">
+    <h2 class="text-center text-2xl font-bold text-garden-900 sm:text-3xl">{t.heading}</h2>
+    <BridgeArc variant="divider" class="mt-2" />
+    <div class="mt-8 grid gap-6 md:grid-cols-2">
+      <div class="card flex flex-col border-t-4 !border-t-garden-700">
+        <h3 class="text-lg font-bold text-garden-900" lang="ja">{t.companies.title}</h3>
+        <p class="mt-3 flex-1 text-sm leading-relaxed text-ink-600" lang="ja">{t.companies.body}</p>
+        <a href={t.companies.href} class="btn-outline mt-6 self-start text-sm">{t.companies.cta}</a>
+      </div>
+      <div class="card flex flex-col border-t-4 !border-t-torii-500">
+        <h3 class="text-lg font-bold text-garden-900">{t.candidates.title}</h3>
+        {'sub' in t.candidates && <p class="text-xs font-semibold text-torii-600">{t.candidates.sub}</p>}
+        <p class="mt-3 flex-1 text-sm leading-relaxed text-ink-600">{t.candidates.body}</p>
+        <a
+          href={t.candidates.href}
+          class="btn-primary mt-6 self-start text-sm"
+          {...t.candidates.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+        >
+          {t.candidates.cta}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+
+/* ============================================================
+   KEBUN.TECH DESIGN TOKENS
+   Identitas: diturunkan dari logo resmi PT KTI (emblem heksagonal
+   teal petrol, gradasi #024256 → #095e76 → #71aebd), dengan aksen
+   merah-oranye torii lembut khusus CTA dan netral washi hangat.
+   ============================================================ */
+@theme {
+  /* garden — teal petrol utama brand (dari gradasi emblem logo) */
+  --color-garden-950: #032a38;
+  --color-garden-900: #05384a;
+  --color-garden-800: #074457;
+  --color-garden-700: #095e76;
+  --color-garden-600: #157189;
+  --color-garden-500: #2e8ba0;
+  --color-garden-300: #71aebd;
+  --color-garden-200: #a9cfda;
+  --color-garden-100: #d3e7ed;
+  --color-garden-50: #ecf5f8;
+
+  /* torii — aksen hangat Jepang, HANYA untuk CTA & penanda "JP" */
+  --color-torii-700: #a63c22;
+  --color-torii-600: #c04a2f;
+  --color-torii-500: #d2583a;
+  --color-torii-100: #f9e3dc;
+  --color-torii-50: #fdf1ed;
+
+  /* washi — netral hangat terang untuk background */
+  --color-washi-50: #faf9f5;
+  --color-washi-100: #f4f1e9;
+  --color-washi-200: #e8e3d5;
+
+  /* ink — teks */
+  --color-ink-900: #1d2723;
+  --color-ink-700: #34413b;
+  --color-ink-600: #4b5a53;
+  --color-ink-400: #8a968f;
+
+  /* Tipografi: Noto Sans JP untuk Jepang & body,
+     Plus Jakarta Sans (font desainer Indonesia) untuk display Latin */
+  --font-sans: 'Noto Sans JP Variable', 'Plus Jakarta Sans Variable', system-ui,
+    -apple-system, sans-serif;
+  --font-display: 'Plus Jakarta Sans Variable', 'Noto Sans JP Variable', system-ui,
+    -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-washi-50 text-ink-900 font-sans antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+
+  /* Fokus keyboard harus selalu terlihat */
+  :focus-visible {
+    outline: 3px solid var(--color-torii-500);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-base font-semibold transition-colors bg-torii-600 text-white hover:bg-torii-700;
+  }
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-base font-semibold transition-colors border-2 border-garden-700 text-garden-800 hover:bg-garden-50;
+  }
+  .btn-light {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-base font-semibold transition-colors bg-white text-garden-900 hover:bg-garden-50;
+  }
+
+  .card {
+    @apply rounded-2xl border border-washi-200 bg-white p-6 shadow-sm;
+  }
+
+  .eyebrow {
+    @apply text-sm font-semibold tracking-widest text-garden-600 uppercase;
+  }
+
+  /* Artikel berita / body copy panjang */
+  .prose-basic h2 {
+    @apply mt-10 mb-4 text-2xl font-bold text-garden-900;
+  }
+  .prose-basic h3 {
+    @apply mt-8 mb-3 text-xl font-bold text-ink-900;
+  }
+  .prose-basic p {
+    @apply mb-5 leading-relaxed text-ink-700;
+  }
+  .prose-basic ul,
+  .prose-basic ol {
+    @apply mb-5 ml-6 list-disc space-y-2 text-ink-700;
+  }
+  .prose-basic ol {
+    @apply list-decimal;
+  }
+  .prose-basic a {
+    @apply text-garden-700 underline underline-offset-2 hover:text-garden-900;
+  }
+  .prose-basic strong {
+    @apply text-ink-900;
+  }
+}
+
+/* Animasi dash "bridge arc" & float prisma hero — hormati prefers-reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .bridge-dash {
+    animation: bridge-flow 14s linear infinite;
+  }
+  @keyframes bridge-flow {
+    to {
+      stroke-dashoffset: -220;
+    }
+  }
+
+  .stage-float {
+    animation: stage-float 8s ease-in-out infinite;
+  }
+  @keyframes stage-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+}

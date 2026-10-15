@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import CTASection from '../../../../components/CTASection.astro';
+import { getStaticLangPaths, type Lang } from '../../../../i18n/ui';
+import imgConsulting from '../../../../assets/images/meeting.webp';
+
+export function getStaticPaths() {
+  return getStaticLangPaths();
+}
+const lang = Astro.params.lang as Lang;
+
+const t = {
+  ja: {
+    meta: {
+      title: 'インドネシア・ビジネスコンサルティング',
+      description:
+        'インドネシア市場参入支援、ハラール対応、現地パートナー探索、通訳・翻訳。名古屋大学博士の創業者を中心に、日イ両言語・両文化でビジネスを支援します。',
+    },
+    eyebrow: 'Service 03',
+    title: 'ビジネスコンサルティング',
+    lead: '人材事業で培った両国のネットワークと、日本の大学・企業文化を知り尽くした創業者の知見を活かし、インドネシアと日本の間のビジネスを支援します。「現地の言葉で、現地の商習慣で」動けるパートナーをお探しの企業様へ。',
+    services: [
+      { title: '市場参入支援', body: 'インドネシア市場の調査、事業計画の検討、現地法規制の情報収集など、参入初期の意思決定を支援します。世界第4位の人口を持つ成長市場への一歩を、確かな情報から。' },
+      { title: 'ハラール対応支援', body: '世界最大のムスリム人口を抱えるインドネシアでは、ハラール対応が事業の前提となる場面が少なくありません。認証取得に向けた情報整理と現地パートナーとの橋渡しを支援します。' },
+      { title: 'パートナー探索・商談支援', body: '現地企業・大学・行政とのネットワークを活かし、信頼できるパートナー候補の探索から商談同席、契約交渉の言語面まで支援します。' },
+      { title: '通訳・翻訳', body: 'ビジネス文書の翻訳、商談・視察時の通訳（日本語⇄インドネシア語⇄英語）。技術系博士が監修するため、製造・技術分野の専門的な内容にも対応します。' },
+    ],
+    cta: { label: 'コンサルティングのご相談', href: '/ja/contact/' },
+  },
+  id: {
+    meta: {
+      title: 'Konsultasi Bisnis Indonesia–Jepang',
+      description:
+        'Layanan konsultasi bisnis dua arah Indonesia–Jepang: market entry, pendampingan halal, pencarian mitra, dan penerjemahan bisnis oleh tim yang paham kedua negara.',
+    },
+    eyebrow: 'Layanan 03',
+    title: 'Konsultasi Bisnis Indonesia–Jepang',
+    lead: 'Jaringan kami di dua negara tidak hanya untuk penempatan kerja. Kami juga mendampingi perusahaan — Jepang maupun Indonesia — yang ingin mengembangkan bisnis lintas negara.',
+    services: [
+      { title: 'Market entry', body: 'Riset pasar, penyusunan rencana masuk, dan informasi regulasi untuk perusahaan Jepang yang ingin masuk Indonesia — atau sebaliknya.' },
+      { title: 'Pendampingan halal', body: 'Membantu perusahaan Jepang memahami dan mempersiapkan kebutuhan sertifikasi halal untuk pasar Indonesia.' },
+      { title: 'Pencarian mitra bisnis', body: 'Menghubungkan dengan mitra potensial yang kredibel — perusahaan, universitas, maupun institusi pemerintah — lengkap dengan pendampingan negosiasi.' },
+      { title: 'Penerjemahan & juru bahasa', body: 'Terjemahan dokumen bisnis dan pendampingan rapat dalam bahasa Jepang, Indonesia, dan Inggris, termasuk materi teknis.' },
+    ],
+    cta: { label: 'Diskusikan Kebutuhan Anda', href: '/id/contact/' },
+  },
+  en: {
+    meta: {
+      title: 'Indonesia–Japan Business Consulting',
+      description:
+        'Market entry, halal readiness, partner search and bilingual business support between Indonesia and Japan, led by a Nagoya University PhD founder.',
+    },
+    eyebrow: 'Service 03',
+    title: 'Indonesia–Japan Business Consulting',
+    lead: 'The same cross-border network that powers our talent business also serves companies doing business between Indonesia and Japan.',
+    services: [
+      { title: 'Market entry', body: 'Market research, entry planning and regulatory intelligence for Japan → Indonesia expansion (and the reverse).' },
+      { title: 'Halal readiness', body: 'Guidance for Japanese companies preparing halal certification for the world’s largest Muslim market.' },
+      { title: 'Partner search', body: 'Introductions to credible companies, universities and institutions, with negotiation support.' },
+      { title: 'Translation & interpreting', body: 'Business and technical translation across Japanese, Indonesian and English, supervised by our engineering-PhD founder.' },
+    ],
+    cta: { label: 'Discuss your needs', href: '/en/contact/' },
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} path="/services/consulting/">
+  <section class="bg-garden-900">
+    <div class="container-site py-14 lg:py-18">
+      <p class="eyebrow !text-garden-300">{t.eyebrow}</p>
+      <h1 class="mt-2 max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">{t.title}</h1>
+      <p class="mt-5 max-w-3xl leading-relaxed text-garden-100">{t.lead}</p>
+    </div>
+  </section>
+
+  <section class="bg-washi-50">
+    <div class="container-site py-14 lg:py-18">
+      <div class="grid gap-6 md:grid-cols-2">
+        {
+          t.services.map((s) => (
+            <div class="card">
+              <h2 class="text-lg font-bold text-garden-900">{s.title}</h2>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+      {/* FOTO: suasana meeting konsultasi bisnis Indonesia–Jepang */}
+      <Image
+        src={imgConsulting}
+        alt={lang === 'ja' ? '日イ間ビジネスの商談の様子' : lang === 'id' ? 'Suasana rapat konsultasi bisnis Indonesia–Jepang' : 'Indonesia–Japan business consulting meeting'}
+        class="mx-auto mt-10 h-56 w-full max-w-3xl rounded-2xl border border-washi-200 object-cover"
+      />
+      <div class="mt-10 text-center">
+        <a href={t.cta.href} class="btn-primary">{t.cta.label}</a>
+      </div>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>

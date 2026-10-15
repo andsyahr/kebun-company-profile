@@ -1,0 +1,43 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  name: string;
+  program: string;
+  prefecture: string;
+  quote: string;
+  photo?: ImageMetadata;
+  photoAlt?: string;
+}
+const { name, program, prefecture, quote, photo, photoAlt } = Astro.props;
+const initials = name
+  .split(' ')
+  .map((w) => w[0])
+  .join('')
+  .slice(0, 2)
+  .toUpperCase();
+---
+
+<!-- GANTI DENGAN TESTIMONI ASLI -->
+<figure class="card flex h-full flex-col">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="var(--color-garden-300)" aria-hidden="true">
+    <path d="M9.6 5C6 7 4 10 4 14a5 5 0 0 0 5 5c2.2 0 4-1.8 4-4s-1.8-4-4-4c-.3 0-.7 0-1 .1C8.6 9.4 9.8 7.9 11.6 7L9.6 5zm9 0c-3.6 2-5.6 5-5.6 9a5 5 0 0 0 5 5c2.2 0 4-1.8 4-4s-1.8-4-4-4c-.3 0-.7 0-1 .1.6-1.7 1.8-3.2 3.6-4.1L18.6 5z"/>
+  </svg>
+  <blockquote class="mt-3 flex-1 text-sm leading-relaxed text-ink-700">{quote}</blockquote>
+  <figcaption class="mt-5 flex items-center gap-3 border-t border-washi-200 pt-4">
+    {
+      photo ? (
+        <Image src={photo} alt={photoAlt ?? name} width={48} height={48} class="h-12 w-12 shrink-0 rounded-full object-cover object-[50%_0]" />
+      ) : (
+        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-garden-100 text-sm font-bold text-garden-800" aria-hidden="true">
+          {initials}
+        </span>
+      )
+    }
+    <div>
+      <p class="text-sm font-bold text-ink-900">{name}</p>
+      <p class="text-xs text-ink-600">{program} · {prefecture}</p>
+    </div>
+  </figcaption>
+</figure>

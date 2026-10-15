@@ -1,0 +1,396 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HeroStage from '../../components/HeroStage.astro';
+import StatsBar from '../../components/StatsBar.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import CTASection from '../../components/CTASection.astro';
+import { getStaticLangPaths, useUI, type Lang } from '../../i18n/ui';
+import imgTrainingSolo from '../../assets/images/lpk-sukoharjo.webp';
+import imgTrainingBekasi from '../../assets/images/office.webp';
+
+export function getStaticPaths() {
+  return getStaticLangPaths();
+}
+
+const lang = Astro.params.lang as Lang;
+const ui = useUI(lang);
+
+const t = {
+  ja: {
+    meta: {
+      title: '特定技能・育成就労のインドネシア人材紹介',
+      description:
+        'インドネシア政府認定の送り出し機関（P3MI）。特定技能・育成就労・技能実習に対応した人材紹介、日本語教育、入国後の定着支援まで、名古屋のグループ会社とワンストップでご支援します。',
+    },
+    hero: {
+      headline: 'インドネシアと日本を、\n人でつなぐ。',
+      subline: 'Menghubungkan Indonesia dan Jepang, lewat manusia.',
+      description:
+        'インドネシア政府認定の送り出し機関（P3MI）として、特定技能・育成就労・技能実習に対応した人材のご紹介から、入国後の定着支援まで。名古屋のグループ会社・株式会社ANCジャパンとともに、両国から一貫してサポートいたします。',
+    },
+    doorCompanies: {
+      title: '日本企業の皆さまへ',
+      sub: 'For Japanese companies',
+      body: '特定技能・育成就労・技能実習に対応した人材紹介。面接から教育、ビザ、入国、定着支援までワンストップでご支援します。',
+      cta: '詳しく見る',
+    },
+    doorCandidates: {
+      title: 'Untuk Calon Pekerja',
+      sub: 'インドネシア人求職者の方へ',
+      body: 'Kerja di Jepang secara resmi dan aman. Program SSW & magang, pelatihan bahasa Jepang, pendampingan penuh — tanpa calo.',
+      cta: 'Lihat Program',
+    },
+    reasons: {
+      eyebrow: 'Why Kebun',
+      title: '選ばれる3つの理由',
+      items: [
+        {
+          title: '政府認定ライセンス × 名古屋グループの二拠点体制',
+          body: 'インドネシア労働省認定のP3MI（送り出し機関）である当社と、日本側で有料職業紹介・登録支援機関のライセンスを持つグループ会社ANCジャパン。送り出しから受け入れ、定着支援まで一つのグループで完結します。',
+        },
+        {
+          title: 'トップ大学とのMOU × 自社トレーニングセンター',
+          body: 'ガジャマダ大学（UGM）・インドネシア大学（UI）・ボゴール農科大学（IPB）との連携による人材パイプラインに加え、ソロとブカシの自社トレーニングセンターで日本語と日本の職場文化を徹底教育します。',
+        },
+        {
+          title: '名古屋大学博士の創業者による「両側からの理解」',
+          body: '創業者は名古屋大学で工学博士号を取得し、現在も日本に在住するインドネシア人です。日本の現場の期待値とインドネシアの人材事情、その両方を内側から理解したうえでご提案します。',
+        },
+      ],
+    },
+    services: {
+      eyebrow: 'Services',
+      title: 'サービス',
+      items: [
+        { title: '特定技能（SSW）', body: '即戦力となるインドネシア人材の紹介。介護・外食・製造・建設・農業など幅広い分野に対応します。', href: `/ja/services/ssw/` },
+        { title: '技能実習 → 育成就労', body: '技能実習の実績を土台に、2027年施行予定の育成就労制度への移行を見据えた受け入れをご支援します。', href: `/ja/services/ginou-jisshu/` },
+        { title: 'ビジネスコンサルティング', body: 'インドネシア市場参入、ハラール対応、現地パートナー探索など、日イ間ビジネスを両言語で支援します。', href: `/ja/services/consulting/` },
+      ],
+    },
+    flow: {
+      eyebrow: 'Flow',
+      title: '受け入れの流れ',
+      subtitle: 'お問い合わせから定着支援まで、各ステップを両国のチームが伴走します。',
+      steps: ['無料相談', '面接・選考', '教育・訓練', 'ビザ申請', '入国・配属', '定着支援'],
+      cta: '企業向けページで詳しく見る',
+      ctaHref: '/ja/for-companies/',
+    },
+    training: {
+      eyebrow: 'Training Centers',
+      title: '自社トレーニングセンター（ソロ・ブカシ）',
+      subtitle: '出国前に日本語（JLPT/JFT-Basic）と日本の職場文化（報連相・5S・安全衛生）を徹底的に教育。「日本で長く活躍できる人材」を育ててから送り出します。',
+      cta: 'トレーニング内容を見る',
+    },
+    news: { eyebrow: 'News', title: 'ニュース・コラム' },
+  },
+  id: {
+    meta: {
+      title: 'Kerja di Jepang Resmi & Aman — P3MI Berizin',
+      description:
+        'PT Kebun Teknologi Indonesia adalah P3MI berizin resmi Kemnaker untuk penempatan kerja ke Jepang: program Tokutei Ginou (SSW), magang, dan Ikusei Shuro. Training center di Solo & Bekasi. Tanpa calo, biaya transparan.',
+    },
+    hero: {
+      headline: 'Menghubungkan Indonesia\ndan Jepang, lewat manusia.',
+      subline: 'インドネシアと日本を、人でつなぐ。',
+      description:
+        'Kami adalah P3MI berizin resmi Kementerian Ketenagakerjaan RI yang menempatkan pekerja Indonesia ke Jepang melalui jalur resmi — program Tokutei Ginou (SSW), magang teknis, dan Ikusei Shuro — dengan pendampingan penuh dari Indonesia sampai kamu bekerja di Jepang.',
+    },
+    doorCompanies: {
+      title: '日本企業の皆さまへ',
+      sub: 'Untuk perusahaan Jepang',
+      body: '特定技能・育成就労・技能実習に対応した人材紹介。面接から定着支援までワンストップでご支援します。',
+      cta: '詳しく見る',
+    },
+    doorCandidates: {
+      title: 'Untuk Calon Pekerja',
+      sub: 'Lulusan SMA/SMK/D3/S1',
+      body: 'Kerja di Jepang secara resmi dan aman. Program jelas, biaya transparan, dilatih dulu sampai siap — tanpa calo.',
+      cta: 'Lihat Program',
+    },
+    reasons: {
+      eyebrow: 'Kenapa Kebun',
+      title: '3 Alasan Memilih Kami',
+      items: [
+        {
+          title: 'Resmi dan berlisensi, dengan grup di Jepang',
+          body: 'Kami P3MI berizin Kemnaker RI. Di sisi Jepang, grup kami ANC Japan (Nagoya) memegang lisensi resmi penyaluran kerja dan lembaga pendamping. Artinya: kamu didampingi tim yang sama di Indonesia dan di Jepang.',
+        },
+        {
+          title: 'Kerja sama universitas top + training center sendiri',
+          body: 'Kami punya MOU dengan UGM, UI, dan IPB, serta training center sendiri di Solo dan Bekasi. Sebelum berangkat, kamu dilatih bahasa Jepang dan budaya kerja Jepang sampai benar-benar siap.',
+        },
+        {
+          title: 'Dipimpin orang Indonesia yang paham Jepang dari dalam',
+          body: 'Founder kami, Dr. Mardiansyah Mardis, meraih gelar doktor dari Nagoya University dan tinggal di Jepang. Kami tahu persis dunia kerja Jepang — dan memastikan kamu siap menghadapinya.',
+        },
+      ],
+    },
+    services: {
+      eyebrow: 'Layanan',
+      title: 'Program & Layanan',
+      items: [
+        { title: 'Tokutei Ginou (SSW)', body: 'Bekerja langsung di Jepang dengan gaji setara pekerja lokal. Bidang: perawatan lansia, restoran, manufaktur, konstruksi, pertanian, dan lainnya.', href: `/id/services/ssw/` },
+        { title: 'Magang Teknis → Ikusei Shuro', body: 'Program magang teknis yang sedang bertransisi ke sistem baru Ikusei Shuro — jalur berkarier jangka panjang di Jepang.', href: `/id/services/ginou-jisshu/` },
+        { title: 'Konsultasi Bisnis', body: 'Untuk perusahaan: pendampingan bisnis Indonesia–Jepang, dari market entry sampai pencarian mitra.', href: `/id/services/consulting/` },
+      ],
+    },
+    flow: {
+      eyebrow: 'Alur',
+      title: 'Alur Pendaftaran',
+      subtitle: 'Dari daftar sampai kerja di Jepang, kamu didampingi di setiap langkah.',
+      steps: ['Konsultasi gratis', 'Daftar & seleksi', 'Pelatihan di LPK', 'Wawancara & visa', 'Berangkat ke Jepang', 'Pendampingan di Jepang'],
+      cta: 'Lihat detail untuk kandidat',
+      ctaHref: '/id/for-candidates/',
+    },
+    training: {
+      eyebrow: 'Training Center',
+      title: 'Training Center Solo & Bekasi',
+      subtitle: 'Sebelum berangkat, kamu belajar bahasa Jepang (target JLPT N4 / JFT-Basic) dan budaya kerja Jepang di training center kami sendiri — bukan dititipkan ke pihak lain.',
+      cta: 'Lihat Training Center',
+    },
+    news: { eyebrow: 'Berita', title: 'Berita & Artikel' },
+  },
+  en: {
+    meta: {
+      title: 'Indonesian Talent for Japan — Licensed Sending Organization',
+      description:
+        'PT Kebun Teknologi Indonesia is a licensed Indonesian overseas placement company (P3MI) and sending organization for Japan: SSW, technical intern and Ikusei Shuro programs, with training centers in Solo & Bekasi and a group company in Nagoya.',
+    },
+    hero: {
+      headline: 'Connecting Indonesia\nand Japan, through people.',
+      subline: 'インドネシアと日本を、人でつなぐ。',
+      description:
+        'A licensed sending organization (P3MI) placing Indonesian workers in Japan under the SSW, technical intern and upcoming Ikusei Shuro programs — with end-to-end support on both sides through our Nagoya-based group company, ANC Japan.',
+    },
+    doorCompanies: {
+      title: '日本企業の皆さまへ',
+      sub: 'For Japanese companies',
+      body: 'One-stop hiring of Indonesian talent: interviews, training, visa, arrival and retention support.',
+      cta: 'Learn more',
+    },
+    doorCandidates: {
+      title: 'Untuk Calon Pekerja',
+      sub: 'For Indonesian candidates',
+      body: 'Work in Japan through official, safe channels — clear programs, transparent costs, no brokers.',
+      cta: 'View programs',
+    },
+    reasons: {
+      eyebrow: 'Why Kebun',
+      title: 'Three Reasons Clients Choose Us',
+      items: [
+        {
+          title: 'Licensed on both sides of the bridge',
+          body: 'We hold an official P3MI license from Indonesia’s Ministry of Manpower, while our Nagoya group company ANC Japan is a licensed paid job-placement and registered support organization. One group, end to end.',
+        },
+        {
+          title: 'Top-university pipeline + our own training centers',
+          body: 'MOUs with UGM, UI and IPB feed our talent pipeline, and our own training centers in Solo and Bekasi teach Japanese language and workplace culture before departure.',
+        },
+        {
+          title: 'A founder who knows Japan from the inside',
+          body: 'Our founder, Dr. Mardiansyah Mardis, earned his doctorate at Nagoya University and lives in Japan — combining first-hand knowledge of Japanese workplaces with deep roots in Indonesia.',
+        },
+      ],
+    },
+    services: {
+      eyebrow: 'Services',
+      title: 'Services',
+      items: [
+        { title: 'Specified Skilled Worker (SSW)', body: 'Job-ready Indonesian talent for care, food service, manufacturing, construction, agriculture and more.', href: `/en/services/ssw/` },
+        { title: 'TITP → Ikusei Shuro', body: 'Technical intern placements, ready for the transition to Japan’s new Ikusei Shuro system.', href: `/en/services/ginou-jisshu/` },
+        { title: 'Business Consulting', body: 'Indonesia–Japan market entry, halal readiness and partner search — in both languages.', href: `/en/services/consulting/` },
+      ],
+    },
+    flow: {
+      eyebrow: 'Flow',
+      title: 'How It Works',
+      subtitle: 'From first consultation to long-term retention, our teams in both countries walk with you.',
+      steps: ['Consultation', 'Interview', 'Training', 'Visa', 'Arrival', 'Retention support'],
+      cta: 'See details for companies',
+      ctaHref: '/en/for-companies/',
+    },
+    training: {
+      eyebrow: 'Training Centers',
+      title: 'Our Training Centers in Solo & Bekasi',
+      subtitle: 'Before departure, candidates study Japanese (JLPT N4 / JFT-Basic) and Japanese workplace culture at our own centers.',
+      cta: 'View training',
+    },
+    news: { eyebrow: 'News', title: 'News & Articles' },
+  },
+}[lang];
+
+---
+
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} path="/">
+  {/* ===== HERO: headline bilingual + dua pintu, latar "panggung perspektif" ===== */}
+  <section class="relative overflow-hidden bg-linear-to-b from-washi-50 to-garden-50">
+    <HeroStage />
+    <div class="container-site relative pt-16 pb-14 lg:pt-24 lg:pb-20">
+      <div class="mx-auto max-w-3xl text-center">
+        <h1 class="whitespace-pre-line text-3xl font-extrabold leading-tight text-garden-900 sm:text-4xl lg:text-5xl">
+          {t.hero.headline}
+        </h1>
+        <p class="mt-3 text-base font-semibold text-garden-600">{t.hero.subline}</p>
+        <p class="mx-auto mt-6 max-w-2xl leading-relaxed text-ink-600">{t.hero.description}</p>
+      </div>
+
+      {/* Dua pintu: perusahaan Jepang (selalu bhs Jepang → /ja/) & kandidat (selalu bhs Indonesia → /id/) */}
+      <div class="mx-auto mt-10 grid max-w-4xl gap-5 md:grid-cols-2">
+        <a
+          href="/ja/for-companies/"
+          class="group card flex flex-col border-t-4 !border-t-garden-700 transition-shadow hover:shadow-md"
+        >
+          <p class="text-xs font-semibold tracking-wide text-garden-600 uppercase">{t.doorCompanies.sub}</p>
+          <h2 class="mt-1 text-xl font-bold text-garden-900" lang="ja">{t.doorCompanies.title}</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-ink-600" lang="ja">{t.doorCompanies.body}</p>
+          <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-garden-700 group-hover:gap-2.5 transition-all" lang="ja">
+            {t.doorCompanies.cta}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </span>
+        </a>
+        <a
+          href="/id/for-candidates/"
+          class="group card flex flex-col border-t-4 !border-t-torii-500 transition-shadow hover:shadow-md"
+        >
+          <p class="text-xs font-semibold tracking-wide text-torii-600 uppercase">{t.doorCandidates.sub}</p>
+          <h2 class="mt-1 text-xl font-bold text-garden-900" lang="id">{t.doorCandidates.title}</h2>
+          <p class="mt-3 flex-1 text-sm leading-relaxed text-ink-600" lang="id">{t.doorCandidates.body}</p>
+          <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-torii-600 group-hover:gap-2.5 transition-all" lang="id">
+            {t.doorCandidates.cta}
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <StatsBar lang={lang} />
+
+  {/* ===== 選ばれる3つの理由 ===== */}
+  <section class="bg-washi-50">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading eyebrow={t.reasons.eyebrow} title={t.reasons.title} />
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        {
+          t.reasons.items.map((item, i) => (
+            <div class="card">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-garden-900 font-display text-lg font-extrabold text-white">
+                {i + 1}
+              </span>
+              <h3 class="mt-4 text-lg font-bold text-garden-900">{item.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Services ===== */}
+  <section class="bg-white">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading eyebrow={t.services.eyebrow} title={t.services.title} />
+      <div class="mt-10 grid gap-6 md:grid-cols-3">
+        {
+          t.services.items.map((item) => (
+            <a href={item.href} class="group card transition-shadow hover:shadow-md">
+              <h3 class="text-lg font-bold text-garden-900 group-hover:text-garden-700">{item.title}</h3>
+              <p class="mt-3 text-sm leading-relaxed text-ink-600">{item.body}</p>
+              <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-garden-700">
+                {ui.cta.readMore}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Flow ===== */}
+  <section class="bg-garden-50">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading eyebrow={t.flow.eyebrow} title={t.flow.title} subtitle={t.flow.subtitle} />
+      <ol class="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        {
+          t.flow.steps.map((step, i) => (
+            <li class="relative flex flex-col items-center rounded-xl bg-white p-4 text-center shadow-sm">
+              <span class="flex h-8 w-8 items-center justify-center rounded-full bg-garden-700 text-sm font-bold text-white">
+                {i + 1}
+              </span>
+              <span class="mt-2 text-xs font-semibold leading-snug text-ink-700">{step}</span>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="mt-8 text-center">
+        <a href={t.flow.ctaHref} class="btn-outline text-sm">{t.flow.cta}</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Training teaser ===== */}
+  <section class="bg-white">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading eyebrow={t.training.eyebrow} title={t.training.title} subtitle={t.training.subtitle} />
+      <div class="mx-auto mt-10 grid max-w-4xl gap-6 sm:grid-cols-2">
+        {/* FOTO: gedung/kelas LPK Kebun Solo — ganti placeholder di src/assets/placeholders/ */}
+        <figure class="overflow-hidden rounded-2xl border border-washi-200">
+          <Image src={imgTrainingSolo} alt={lang === 'ja' ? 'ソロのトレーニングセンター（LPK Kebun）の校舎と教室' : lang === 'id' ? 'Gedung dan ruang kelas LPK Kebun Solo' : 'LPK Kebun training center building in Solo'} class="h-52 w-full object-cover" />
+          <figcaption class="bg-washi-50 px-4 py-3 text-sm font-bold text-garden-900">Solo (Sukoharjo)</figcaption>
+        </figure>
+        {/* FOTO: gedung/kelas LPK Kebun Bekasi */}
+        <figure class="overflow-hidden rounded-2xl border border-washi-200">
+          <Image src={imgTrainingBekasi} alt={lang === 'ja' ? 'ブカシのトレーニングセンター（LPK Kebun）の校舎と教室' : lang === 'id' ? 'Gedung dan ruang kelas LPK Kebun Bekasi' : 'LPK Kebun training center building in Bekasi'} class="h-52 w-full object-cover" />
+          <figcaption class="bg-washi-50 px-4 py-3 text-sm font-bold text-garden-900">Bekasi</figcaption>
+        </figure>
+      </div>
+      <div class="mt-8 text-center">
+        <a href={`/${lang}/training/`} class="btn-outline text-sm">{t.training.cta}</a>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== News — diisi client-side dari Firestore (3 terbaru) ===== */}
+  <section id="home-news" class="hidden bg-washi-100">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading eyebrow={t.news.eyebrow} title={t.news.title} />
+      <div id="home-news-grid" class="mt-10 grid gap-6 md:grid-cols-3"></div>
+      <div class="mt-8 text-center">
+        <a href={`/${lang}/news/`} class="btn-outline text-sm">{ui.cta.viewAll}</a>
+      </div>
+    </div>
+  </section>
+  <script>
+    import { listPublishedNews } from '../../lib/news';
+    import { dateLocales, type Lang } from '../../i18n/ui';
+
+    const section = document.getElementById('home-news');
+    const grid = document.getElementById('home-news-grid');
+    const lang = document.documentElement.lang as Lang;
+    const esc = (s: string) => s.replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
+
+    if (section && grid) {
+      listPublishedNews(lang, 3).then((posts) => {
+        if (posts.length === 0) return;
+        grid.innerHTML = posts
+          .map(
+            (p) => `
+          <a href="/${lang}/news/${encodeURIComponent(p.slug)}/" class="group card transition-shadow hover:shadow-md">
+            <time datetime="${p.publishedAt.toISOString()}" class="text-xs font-semibold text-ink-400">
+              ${p.publishedAt.toLocaleDateString(dateLocales[lang] ?? 'id-ID', { year: 'numeric', month: 'long', day: 'numeric' })}
+            </time>
+            <h3 class="mt-2 font-bold leading-snug text-ink-900 group-hover:text-garden-700">${esc(p.title)}</h3>
+            <p class="mt-2 line-clamp-3 text-sm text-ink-600">${esc(p.description)}</p>
+          </a>`
+          )
+          .join('');
+        section.classList.remove('hidden');
+      }).catch(() => {});
+    }
+  </script>
+
+  <CTASection lang={lang} />
+</BaseLayout>

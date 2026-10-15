@@ -1,0 +1,353 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BridgeArc from '../../../components/BridgeArc.astro';
+import SectionHeading from '../../../components/SectionHeading.astro';
+import CTASection from '../../../components/CTASection.astro';
+import { getStaticLangPaths, type Lang } from '../../../i18n/ui';
+import imgFounder from '../../../assets/images/mardiansyah-mardis.webp';
+import imgLeaderIndra from '../../../assets/images/indra-kesuma.webp';
+import imgOffice from '../../../assets/images/office.webp';
+
+// Urutan foto mengikuti urutan t.founder.people di tiap bahasa
+const leaderPhotos = [imgFounder, imgLeaderIndra];
+
+export function getStaticPaths() {
+  return getStaticLangPaths();
+}
+const lang = Astro.params.lang as Lang;
+
+const t = {
+  ja: {
+    meta: {
+      title: '会社概要',
+      description:
+        'PT Kebun Teknologi Indonesiaの会社概要。ビジョン・ミッション、創業者メッセージ、ライセンス情報、グループ会社（株式会社ANCジャパン・名古屋）のご紹介。',
+    },
+    title: '会社概要',
+    vision: {
+      eyebrow: 'Vision & Mission',
+      title: '「人」という種を育て、両国に実りを。',
+      body: '社名の「Kebun」は、インドネシア語で「畑・庭」を意味します。人材を「送る」のではなく、種を選び、土を耕し、時間をかけて「育てて」から日本へ届ける。そして日本で根を張り、実りをもたらし、いつかインドネシアにも豊かさを還す——そんな循環をつくることが私たちの使命です。',
+      mission: [
+        '日本で長く活躍できる人材を、教育から責任を持って育てる',
+        '労働者から不当な手数料を取らない、透明で倫理的な送り出しを貫く',
+        '日イ両国の企業と人に、双方向の価値をもたらす架け橋になる',
+      ],
+    },
+    founder: {
+      eyebrow: 'Greeting',
+      title: 'ご挨拶',
+      people: [
+        { name: 'Dr. Mardiansyah Mardis', title: '創業者・名古屋大学 工学博士（化学工学）', alt: 'Dr. Mardiansyah Mardisのポートレート' },
+        { name: 'Indra Kesuma Nasution', title: 'コミサリス（監査役）', alt: 'Indra Kesuma Nasutionのポートレート' },
+      ],
+      paragraphs: [
+        'このたびは当社のウェブサイトにお越しいただき、誠にありがとうございます。',
+        '「Kebun（クブン）」という社名は、インドネシア語で「畑・庭」を意味し、私たちが選んだのには理由があります。豊かな畑がそうであるように、一人ひとりは大きな可能性を秘めた「才能の種」です。丁寧に手をかけ、適切な教育という養分を与え、成長を支える環境に植えれば、世界で通用する優れた人材へと育つ——私たちはそう信じています。',
+        'PT Kebun Teknologi Indonesiaの使命は、「人」を通じて日本とインドネシアをつなぐ「黄金の架け橋」となることです。',
+        '高い技術力とイノベーション、そして旺盛な産業人材ニーズを持つ日本。人口ボーナスを背景に、ダイナミックで創造性と情熱にあふれる若い才能を擁するインドネシア。両者は完璧な相互補完の関係にあります。私たちは、この二つの力を結びつけるために存在しています。',
+        '私たちのプログラムでは、世界水準の技能教育にとどまらず、日本の文化・規律・プロフェッショナルな労働倫理への深い理解も育みます。目指すのは、両国にとって互恵的で持続可能な国際協働です。',
+        '皆さまのご信頼とご支援に、心より感謝申し上げます。善意の種をまき、可能性を育て、日本とインドネシアのより良い未来という実りを、ともに収穫してまいりましょう。',
+      ],
+    },
+    profile: {
+      title: '会社情報',
+      rows: [
+        ['会社名', 'PT Kebun Teknologi Indonesia'],
+        ['事業内容', '海外人材送り出し事業（P3MI）／日本向け人材紹介（特定技能・技能実習・育成就労）／日本語教育（LPK Kebun）／ビジネスコンサルティング'],
+        ['P3MI認定番号', '8120101 9920710004'],
+        ['送出機関（SO）認定番号', '2/718/HK.03.01/Ⅲ/2023'],
+        ['LPK許可番号（職業訓練校）', '569/01/DPMPTSP-PPJU'],
+        ['本社所在地', 'Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu, Bekasi Timur, West Java 17113, Indonesia'],
+        ['トレーニングセンター', 'ソロ（スコハルジョ）・ブカシ'],
+        ['大学連携', 'ガジャマダ大学（UGM）／インドネシア大学（UI）／ボゴール農科大学（IPB）とMOU締結'],
+        ['グループ会社', '株式会社ANCジャパン（愛知県名古屋市）'],
+        ['連絡先', 'business@kebun.tech'],
+      ],
+    },
+    licenses: {
+      title: 'ライセンス・認定',
+      items: [
+        { title: 'P3MI（インドネシア労働省認定）', body: 'インドネシア人材の海外送り出しに必要な国家認定。認定番号：8120101 9920710004' },
+        { title: '送出機関（SO）認定', body: '日本向け送出機関としての認定。認定番号：2/718/HK.03.01/Ⅲ/2023' },
+        { title: 'LPK許可（職業訓練校）', body: '自社トレーニングセンター「LPK Kebun」の職業訓練機関許可。許可番号：569/01/DPMPTSP-PPJU' },
+        { title: '有料職業紹介事業（日本・グループ会社）', body: 'グループ会社ANCジャパンが厚生労働大臣許可の有料職業紹介事業者として人材紹介を行います。' },
+        { title: '登録支援機関（日本・グループ会社）', body: '特定技能外国人への支援計画の実施を、出入国在留管理庁に登録された機関として担います。' },
+      ],
+    },
+    group: {
+      eyebrow: 'Group',
+      title: 'グループ会社：株式会社ANCジャパン',
+      body: '名古屋に拠点を置く株式会社ANCジャパンは、外国人材の紹介・定着支援と日イ間ビジネスコンサルティングを手がけるグループ会社です。1,000名以上のインドネシア人材の日本での就労を支えてきた実績を持ち、当社と一体となって「送り出しから定着まで」の一貫体制を実現しています。',
+      cta: 'ANCジャパンのウェブサイトへ',
+    },
+  },
+  id: {
+    meta: {
+      title: 'Tentang Kami',
+      description:
+        'Profil PT Kebun Teknologi Indonesia: visi-misi, pesan founder Dr. Mardiansyah Mardis, legalitas P3MI, dan grup perusahaan ANC Japan (Nagoya).',
+    },
+    title: 'Tentang Kami',
+    vision: {
+      eyebrow: 'Visi & Misi',
+      title: 'Menyemai manusia, memanen masa depan.',
+      body: 'Nama "Kebun" kami pilih dengan sengaja. Kami tidak sekadar "mengirim" tenaga kerja — kami memilih bibit, mengolah tanah, dan merawat pertumbuhannya: melatih, mendampingi, lalu mengantar sampai kamu berakar dan berbuah di Jepang. Suatu hari nanti, hasil panen itu kembali menyuburkan Indonesia.',
+      mission: [
+        'Mendidik dengan serius agar setiap pekerja siap bertahan lama dan berkembang di Jepang',
+        'Menjaga proses yang transparan dan etis — tanpa calo, tanpa pungutan tidak wajar',
+        'Menjadi jembatan dua arah yang memberi nilai bagi Indonesia dan Jepang',
+      ],
+    },
+    founder: {
+      eyebrow: 'Kata Sambutan',
+      title: 'Sambutan dari Kami',
+      people: [
+        { name: 'Dr. Mardiansyah Mardis', title: 'Founder · Doktor Teknik Kimia, Nagoya University', alt: 'Potret Dr. Mardiansyah Mardis' },
+        { name: 'Indra Kesuma Nasution', title: 'Komisaris', alt: 'Potret Indra Kesuma Nasution' },
+      ],
+      paragraphs: [
+        'Merupakan sebuah kebanggaan bagi kami untuk menyambut Anda di rumah digital kami.',
+        'Nama "Kebun" kami pilih bukan tanpa alasan. Layaknya sebuah kebun yang subur, kami percaya bahwa setiap individu adalah bibit talenta yang memiliki potensi luar biasa. Jika dirawat, diberi nutrisi pendidikan yang tepat, dan ditempatkan di ekosistem yang mendukung, mereka akan tumbuh menjadi SDM yang unggul dan berdaya saing global.',
+        'Fokus utama kami di PT Kebun Teknologi Indonesia adalah menjadi jembatan emas yang menghubungkan Jepang dan Indonesia melalui Sumber Daya Manusia (SDM).',
+        'Kita melihat sebuah sinergi yang sempurna: Jepang dengan kemajuan teknologi, inovasi, dan kebutuhan industrinya yang tinggi, berdampingan dengan Indonesia yang memiliki bonus demografi serta talenta muda yang dinamis, kreatif, dan penuh semangat. Kami hadir untuk menyatukan kedua kekuatan ini.',
+        'Melalui program-program kami, kami tidak hanya membekali SDM Indonesia dengan keterampilan teknis kelas dunia, tetapi juga menanamkan pemahaman mendalam mengenai budaya, disiplin, dan etos kerja profesional Jepang. Tujuan kami adalah menciptakan kolaborasi lintas negara yang saling menguntungkan dan berkelanjutan.',
+        'Terima kasih atas kepercayaan dan dukungan Anda. Mari bersama-sama menanam benih kebaikan, merawat potensi, dan memanen kesuksesan untuk masa depan Indonesia dan Jepang yang lebih baik.',
+      ],
+    },
+    profile: {
+      title: 'Profil Perusahaan',
+      rows: [
+        ['Nama perusahaan', 'PT Kebun Teknologi Indonesia'],
+        ['Bidang usaha', 'Penempatan pekerja migran (P3MI) / Penyaluran kerja ke Jepang (SSW, magang, Ikusei Shuro) / Pelatihan bahasa Jepang (LPK Kebun) / Konsultasi bisnis'],
+        ['No. izin P3MI', '8120101 9920710004'],
+        ['No. izin SO (送出機関)', '2/718/HK.03.01/Ⅲ/2023'],
+        ['No. izin LPK', '569/01/DPMPTSP-PPJU'],
+        ['Kantor pusat', 'Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu, Bekasi Timur, West Java 17113, Indonesia'],
+        ['Training center', 'Solo (Sukoharjo) & Bekasi'],
+        ['Kerja sama universitas', 'MOU dengan UGM, UI, dan IPB'],
+        ['Grup perusahaan', 'ANC Japan Co., Ltd. (Nagoya, Jepang)'],
+        ['Kontak', 'business@kebun.tech · WhatsApp +62 819 0335 3533'],
+      ],
+    },
+    licenses: {
+      title: 'Legalitas & Lisensi',
+      items: [
+        { title: 'Izin P3MI — Kemnaker RI', body: 'Izin resmi Perusahaan Penempatan Pekerja Migran Indonesia. No: 8120101 9920710004 — bisa diverifikasi di Kementerian Ketenagakerjaan.' },
+        { title: 'Izin SO — Sending Organization (送出機関)', body: 'Terakreditasi resmi sebagai lembaga pengirim tenaga kerja ke Jepang. No: 2/718/HK.03.01/Ⅲ/2023' },
+        { title: 'Izin LPK — Lembaga Pelatihan Kerja', body: 'Izin resmi penyelenggaraan pelatihan kerja untuk LPK Kebun. No: 569/01/DPMPTSP-PPJU' },
+        { title: 'Yuryo Shokugyo Shokai (Jepang, grup)', body: 'ANC Japan memegang lisensi resmi penyaluran kerja berbayar dari Kementerian Kesehatan, Tenaga Kerja, dan Kesejahteraan Jepang.' },
+        { title: 'Touroku Shien Kikan (Jepang, grup)', body: 'ANC Japan terdaftar resmi sebagai lembaga pendamping pekerja SSW di Badan Imigrasi Jepang.' },
+      ],
+    },
+    group: {
+      eyebrow: 'Grup',
+      title: 'Grup Kami: ANC Japan (Nagoya)',
+      body: 'ANC Japan Co., Ltd. (株式会社ANCジャパン) adalah perusahaan grup kami yang berbasis di Nagoya, bergerak di penyaluran SDM dan konsultasi bisnis. Lewat grup inilah lebih dari 1.000 pekerja Indonesia telah didampingi bekerja di Jepang — dan lewat grup ini pula kamu tetap punya "rumah" selama di Jepang.',
+      cta: 'Kunjungi situs ANC Japan',
+    },
+  },
+  en: {
+    meta: {
+      title: 'Company',
+      description:
+        'About PT Kebun Teknologi Indonesia: vision and mission, founder message from Dr. Mardiansyah Mardis, P3MI licensing, and group company ANC Japan (Nagoya).',
+    },
+    title: 'Company',
+    vision: {
+      eyebrow: 'Vision & Mission',
+      title: 'Growing people, harvesting futures.',
+      body: '"Kebun" means garden in Indonesian. We don’t simply "send" workers — we select seeds, prepare the soil, and nurture growth: training, accompanying, and staying with our people until they take root and bear fruit in Japan.',
+      mission: [
+        'Train seriously, so every worker can thrive in Japan for the long term',
+        'Keep the process transparent and ethical — no brokers, no improper fees',
+        'Be a two-way bridge that creates value for both countries',
+      ],
+    },
+    founder: {
+      eyebrow: 'Greeting',
+      title: 'A Word of Welcome',
+      people: [
+        { name: 'Dr. Mardiansyah Mardis', title: 'Founder · PhD in Chemical Engineering, Nagoya University', alt: 'Portrait of Dr. Mardiansyah Mardis' },
+        { name: 'Indra Kesuma Nasution', title: 'Commissioner', alt: 'Portrait of Indra Kesuma Nasution' },
+      ],
+      paragraphs: [
+        'It is our great pleasure to welcome you to our digital home.',
+        'We chose the name "Kebun" — Indonesian for garden — deliberately. Like a fertile garden, we believe every individual is a seed of talent with extraordinary potential: nurtured with care, fed with the right education, and planted in a supportive ecosystem, they grow into globally competitive professionals.',
+        'Our focus at PT Kebun Teknologi Indonesia is to be the golden bridge connecting Japan and Indonesia through human resources.',
+        'We see a perfect synergy: Japan, with its technological progress, innovation and pressing industrial needs, alongside Indonesia with its demographic dividend and its dynamic, creative, passionate young talent. We exist to bring these two strengths together.',
+        'Through our programs, we equip Indonesian talent not only with world-class technical skills but also with a deep understanding of Japanese culture, discipline and professional work ethics — creating cross-border collaboration that is mutually beneficial and sustainable.',
+        'Thank you for your trust and support. Together, let us plant seeds of goodness, nurture potential, and harvest success for a better future for Indonesia and Japan.',
+      ],
+    },
+    profile: {
+      title: 'Company Profile',
+      rows: [
+        ['Company name', 'PT Kebun Teknologi Indonesia'],
+        ['Business', 'Overseas worker placement (P3MI) / Placement to Japan (SSW, TITP, Ikusei Shuro) / Japanese language training (LPK Kebun) / Business consulting'],
+        ['P3MI license no.', '8120101 9920710004'],
+        ['SO (sending organization) license no.', '2/718/HK.03.01/Ⅲ/2023'],
+        ['LPK (training school) license no.', '569/01/DPMPTSP-PPJU'],
+        ['Head office', 'Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu, Bekasi Timur, West Java 17113, Indonesia'],
+        ['Training centers', 'Solo (Sukoharjo) & Bekasi'],
+        ['University partners', 'MOUs with UGM, UI and IPB'],
+        ['Group company', 'ANC Japan Co., Ltd. (Nagoya, Japan)'],
+        ['Contact', 'business@kebun.tech'],
+      ],
+    },
+    licenses: {
+      title: 'Licenses',
+      items: [
+        { title: 'P3MI — Ministry of Manpower RI', body: 'Official Indonesian overseas placement license. No: 8120101 9920710004' },
+        { title: 'SO — sending organization (送出機関)', body: 'Officially accredited sending organization for placement to Japan. No: 2/718/HK.03.01/Ⅲ/2023' },
+        { title: 'LPK — vocational training license', body: 'Official training-institution license for LPK Kebun. No: 569/01/DPMPTSP-PPJU' },
+        { title: 'Paid job placement (Japan, group)', body: 'ANC Japan is licensed by Japan’s Ministry of Health, Labour and Welfare for paid employment placement.' },
+        { title: 'Registered support organization (Japan, group)', body: 'ANC Japan is registered with Japan’s Immigration Services Agency to support SSW workers.' },
+      ],
+    },
+    group: {
+      eyebrow: 'Group',
+      title: 'Our Group: ANC Japan (Nagoya)',
+      body: 'ANC Japan Co., Ltd. is our Nagoya-based group company for HR placement and business consulting. Through the group, more than 1,000 Indonesian workers have been supported into jobs in Japan.',
+      cta: 'Visit ANC Japan',
+    },
+  },
+}[lang];
+
+// JSON-LD EmploymentAgency (subtype LocalBusiness)
+const localBusinessJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'EmploymentAgency',
+  name: 'PT Kebun Teknologi Indonesia',
+  url: 'https://kebun.tech',
+  email: 'business@kebun.tech',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Bekasi Town Square Blok I10-I11, Jl. Cut Mutia, Margahayu',
+    addressLocality: 'Bekasi Timur, Bekasi',
+    addressRegion: 'West Java',
+    postalCode: '17113',
+    addressCountry: 'ID',
+  },
+  founder: {
+    '@type': 'Person',
+    name: 'Dr. Mardiansyah Mardis',
+    alumniOf: 'Nagoya University',
+  },
+};
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} path="/company/" extraJsonLd={[localBusinessJsonLd]}>
+  <section class="bg-washi-50">
+    <div class="container-site py-14 lg:py-16">
+      <h1 class="text-center text-3xl font-extrabold text-garden-900 sm:text-4xl">{t.title}</h1>
+      <BridgeArc variant="divider" class="mt-3" />
+    </div>
+  </section>
+
+  {/* ===== Visi Misi ===== */}
+  <section class="bg-white">
+    <div class="container-site py-14 lg:py-18">
+      <SectionHeading eyebrow={t.vision.eyebrow} title={t.vision.title} subtitle={t.vision.body} />
+      <ol class="mx-auto mt-10 grid max-w-4xl gap-5 md:grid-cols-3">
+        {
+          t.vision.mission.map((m, i) => (
+            <li class="card text-center">
+              <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-garden-100 font-display font-extrabold text-garden-800">{i + 1}</span>
+              <p class="mt-3 text-sm leading-relaxed text-ink-700">{m}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  {/* ===== Pesan Founder ===== */}
+  <section class="bg-garden-50">
+    <div class="container-site py-14 lg:py-18">
+      <div class="grid items-start gap-10 lg:grid-cols-[320px_1fr]">
+        <div class="mx-auto grid w-full max-w-xs gap-8 sm:max-w-2xl sm:grid-cols-2 lg:max-w-xs lg:grid-cols-1">
+          {/* FOTO: potret profesional Dr. Mardiansyah Mardis & Indra Kesuma Nasution */}
+          {
+            t.founder.people.map((person, i) => (
+              <figure>
+                <Image src={leaderPhotos[i]} alt={person.alt} class="w-full rounded-2xl border border-washi-200 object-cover" />
+                <figcaption class="mt-4 text-center">
+                  <p class="font-bold text-garden-900">{person.name}</p>
+                  <p class="mt-1 text-xs text-ink-600">{person.title}</p>
+                </figcaption>
+              </figure>
+            ))
+          }
+        </div>
+        <div>
+          <p class="eyebrow">{t.founder.eyebrow}</p>
+          <h2 class="mt-2 text-2xl font-bold text-garden-900 sm:text-3xl">{t.founder.title}</h2>
+          <div class="mt-6 space-y-5">
+            {t.founder.paragraphs.map((p) => <p class="leading-relaxed text-ink-700">{p}</p>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Profil table ===== */}
+  <section class="bg-white">
+    <div class="container-site py-14 lg:py-18">
+      <h2 class="text-center text-2xl font-bold text-garden-900 sm:text-3xl">{t.profile.title}</h2>
+      <div class="mx-auto mt-8 max-w-3xl overflow-hidden rounded-2xl border border-washi-200">
+        <table class="w-full text-sm">
+          <tbody>
+            {
+              t.profile.rows.map(([label, value], i) => (
+                <tr class={i % 2 === 0 ? 'bg-washi-50' : 'bg-white'}>
+                  <th scope="row" class="w-40 px-4 py-3.5 text-left align-top font-bold text-garden-900 sm:w-52 sm:px-6">{label}</th>
+                  <td class="px-4 py-3.5 leading-relaxed text-ink-700 sm:px-6">{value}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      {/* FOTO: kantor PT Kebun Teknologi Indonesia */}
+      <Image src={imgOffice} alt={lang === 'ja' ? '本社オフィスの様子' : lang === 'id' ? 'Kantor PT Kebun Teknologi Indonesia' : 'PT Kebun Teknologi Indonesia office'} class="mx-auto mt-8 h-52 w-full max-w-3xl rounded-2xl border border-washi-200 object-cover" />
+    </div>
+  </section>
+
+  {/* ===== Lisensi ===== */}
+  <section class="bg-washi-100">
+    <div class="container-site py-14 lg:py-18">
+      <h2 class="text-center text-2xl font-bold text-garden-900 sm:text-3xl">{t.licenses.title}</h2>
+      <div class="mt-8 grid gap-6 md:grid-cols-3">
+        {
+          t.licenses.items.map((item) => (
+            <div class="card">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-garden-600)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4z" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+              <h3 class="mt-3 font-bold text-garden-900">{item.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {/* ===== Grup ANC Japan ===== */}
+  <section class="bg-garden-900">
+    <div class="container-site py-14 text-center lg:py-18">
+      <p class="eyebrow !text-garden-300">{t.group.eyebrow}</p>
+      <h2 class="mt-2 text-2xl font-bold text-white sm:text-3xl">{t.group.title}</h2>
+      <p class="mx-auto mt-5 max-w-2xl leading-relaxed text-garden-100">{t.group.body}</p>
+      <a href="https://anc-japan.com" target="_blank" rel="noopener noreferrer" class="btn-light mt-7">
+        {t.group.cta}
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <CTASection lang={lang} />
+</BaseLayout>

@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeading from '../../../components/SectionHeading.astro';
+import CTASection from '../../../components/CTASection.astro';
+import { getStaticLangPaths, useUI, type Lang } from '../../../i18n/ui';
+
+export function getStaticPaths() {
+  return getStaticLangPaths();
+}
+const lang = Astro.params.lang as Lang;
+const ui = useUI(lang);
+
+const t = {
+  ja: {
+    meta: {
+      title: 'サービス一覧',
+      description:
+        '特定技能（SSW）人材紹介、技能実習から育成就労への移行支援、インドネシア・日本間のビジネスコンサルティング。PT Kebun Teknologi Indonesiaのサービス一覧です。',
+    },
+    title: 'サービス',
+    subtitle: '人材の送り出しから、両国間のビジネス支援まで。「人」を軸に、インドネシアと日本をつなぐ3つのサービスを提供しています。',
+    items: [
+      {
+        title: '特定技能（SSW）人材紹介',
+        body: '即戦力となるインドネシア人材を、面接から定着支援までワンストップでご紹介。介護・外食・製造・建設・農業など主要分野に対応し、出国前教育は自社トレーニングセンターで行います。',
+        href: `/ja/services/ssw/`,
+        audience: '受入企業・登録支援機関向け',
+      },
+      {
+        title: '技能実習 → 育成就労',
+        body: '技能実習制度での送り出し実績をもとに、2027年施行予定の育成就労制度への移行を見据えた受け入れ設計をご支援します。制度移行期の不安に、両国の視点からお応えします。',
+        href: `/ja/services/ginou-jisshu/`,
+        audience: '受入企業・監理団体向け',
+      },
+      {
+        title: 'ビジネスコンサルティング',
+        body: 'インドネシア市場参入、ハラール対応、現地パートナー探索、通訳・翻訳。名古屋大学博士の創業者を中心に、日イ両言語・両文化でビジネスを支援します。',
+        href: `/ja/services/consulting/`,
+        audience: '日イ間ビジネスを検討中の企業向け',
+      },
+    ],
+  },
+  id: {
+    meta: {
+      title: 'Layanan Kami',
+      description:
+        'Layanan PT Kebun Teknologi Indonesia: penempatan kerja ke Jepang program Tokutei Ginou (SSW), magang teknis & Ikusei Shuro, serta konsultasi bisnis Indonesia–Jepang.',
+    },
+    title: 'Layanan',
+    subtitle: 'Dari penempatan tenaga kerja sampai dukungan bisnis dua negara — tiga layanan kami yang semuanya berporos pada satu hal: manusia.',
+    items: [
+      {
+        title: 'Tokutei Ginou (SSW)',
+        body: 'Jalur kerja penuh di Jepang dengan gaji setara pekerja lokal. Kami siapkan kamu dari pelatihan bahasa sampai lulus tes, lalu dampingi sampai bekerja di Jepang.',
+        href: `/id/services/ssw/`,
+        audience: 'Untuk calon pekerja & perusahaan Jepang',
+      },
+      {
+        title: 'Magang Teknis → Ikusei Shuro',
+        body: 'Program magang teknis yang sedang beralih ke sistem baru Ikusei Shuro — lebih melindungi pekerja dan membuka jalur karier jangka panjang di Jepang.',
+        href: `/id/services/ginou-jisshu/`,
+        audience: 'Untuk calon pekerja & perusahaan Jepang',
+      },
+      {
+        title: 'Konsultasi Bisnis Indonesia–Jepang',
+        body: 'Pendampingan untuk perusahaan yang ingin masuk pasar Indonesia atau Jepang: riset pasar, sertifikasi halal, pencarian mitra, dan penerjemahan.',
+        href: `/id/services/consulting/`,
+        audience: 'Untuk perusahaan',
+      },
+    ],
+  },
+  en: {
+    meta: {
+      title: 'Services',
+      description:
+        'Services of PT Kebun Teknologi Indonesia: SSW talent placement, technical intern & Ikusei Shuro programs, and Indonesia–Japan business consulting.',
+    },
+    title: 'Services',
+    subtitle: 'From workforce placement to cross-border business support — three services, one axis: people.',
+    items: [
+      {
+        title: 'Specified Skilled Worker (SSW)',
+        body: 'Job-ready Indonesian talent, from interview through visa and retention support, trained at our own centers.',
+        href: `/en/services/ssw/`,
+        audience: 'For employers & support organizations',
+      },
+      {
+        title: 'TITP → Ikusei Shuro',
+        body: 'Technical intern placements with a clear path through Japan’s transition to the new Ikusei Shuro system.',
+        href: `/en/services/ginou-jisshu/`,
+        audience: 'For employers & supervising organizations',
+      },
+      {
+        title: 'Business Consulting',
+        body: 'Indonesia market entry, halal readiness, partner search and bilingual support for Japan–Indonesia business.',
+        href: `/en/services/consulting/`,
+        audience: 'For companies',
+      },
+    ],
+  },
+}[lang];
+---
+
+<BaseLayout lang={lang} title={t.meta.title} description={t.meta.description} path="/services/">
+  <section class="bg-washi-50">
+    <div class="container-site py-16 lg:py-20">
+      <SectionHeading eyebrow="Services" title={t.title} subtitle={t.subtitle} />
+      <div class="mt-12 space-y-6">
+        {
+          t.items.map((item, i) => (
+            <a href={item.href} class="group card flex flex-col gap-4 transition-shadow hover:shadow-md md:flex-row md:items-center md:gap-8">
+              <span class="font-display text-4xl font-extrabold text-garden-200 md:w-16">0{i + 1}</span>
+              <div class="flex-1">
+                <p class="text-xs font-semibold text-torii-600">{item.audience}</p>
+                <h2 class="mt-1 text-xl font-bold text-garden-900 group-hover:text-garden-700">{item.title}</h2>
+                <p class="mt-2 text-sm leading-relaxed text-ink-600">{item.body}</p>
+              </div>
+              <span class="inline-flex items-center gap-1.5 text-sm font-bold text-garden-700 md:shrink-0">
+                {ui.cta.readMore}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+  <CTASection lang={lang} />
+</BaseLayout>

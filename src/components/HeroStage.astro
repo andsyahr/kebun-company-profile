@@ -1,0 +1,70 @@
+---
+/**
+ * Latar "panggung perspektif" untuk hero home (opsi C yang dipilih user):
+ * lantai grid perspektif di dasar section, prisma heksagon melayang
+ * (bentuk diambil dari emblem logo), plus bridge arc bernode bola 3D.
+ * Murni SVG/CSS — tanpa library 3D. Animasi float & dash hanya aktif
+ * saat prefers-reduced-motion: no-preference (lihat global.css).
+ */
+import BridgeArc from './BridgeArc.astro';
+
+const HEX = '0,-50 43.3,-25 43.3,25 0,50 -43.3,25 -43.3,-25';
+---
+
+<div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+  {/* Bridge arc signature — node ID/JP versi bola (gradasi radial) */}
+  <BridgeArc variant="hero" class="absolute inset-x-0 top-6 mx-auto hidden w-full max-w-4xl opacity-50 md:block" />
+
+  {/* Lantai grid perspektif, memudar ke arah horizon */}
+  <svg class="absolute inset-x-0 bottom-0 h-40 w-full sm:h-56" viewBox="0 0 1200 240" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="stage-mg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#000"></stop>
+        <stop offset="0.55" stop-color="#fff"></stop>
+      </linearGradient>
+      <mask id="stage-mask">
+        <rect x="0" y="0" width="1200" height="240" fill="url(#stage-mg)"></rect>
+      </mask>
+    </defs>
+    <g stroke="var(--color-garden-300)" stroke-width="1" mask="url(#stage-mask)">
+      <line x1="596" y1="8" x2="540" y2="240" opacity="0.22"></line>
+      <line x1="604" y1="8" x2="660" y2="240" opacity="0.22"></line>
+      <line x1="582" y1="8" x2="340" y2="240" opacity="0.22"></line>
+      <line x1="618" y1="8" x2="860" y2="240" opacity="0.22"></line>
+      <line x1="568" y1="8" x2="140" y2="240" opacity="0.22"></line>
+      <line x1="632" y1="8" x2="1060" y2="240" opacity="0.22"></line>
+      <line x1="554" y1="8" x2="-60" y2="240" opacity="0.22"></line>
+      <line x1="646" y1="8" x2="1260" y2="240" opacity="0.22"></line>
+      <line x1="540" y1="8" x2="-260" y2="240" opacity="0.22"></line>
+      <line x1="660" y1="8" x2="1460" y2="240" opacity="0.22"></line>
+      <line x1="0" y1="12" x2="1200" y2="12" opacity="0.06"></line>
+      <line x1="0" y1="22" x2="1200" y2="22" opacity="0.09"></line>
+      <line x1="0" y1="36" x2="1200" y2="36" opacity="0.12"></line>
+      <line x1="0" y1="56" x2="1200" y2="56" opacity="0.16"></line>
+      <line x1="0" y1="84" x2="1200" y2="84" opacity="0.2"></line>
+      <line x1="0" y1="122" x2="1200" y2="122" opacity="0.24"></line>
+      <line x1="0" y1="172" x2="1200" y2="172" opacity="0.28"></line>
+      <line x1="0" y1="232" x2="1200" y2="232" opacity="0.3"></line>
+    </g>
+  </svg>
+
+  {/* Prisma heksagon terekstrusi (sisi gelap di bawah, muka terang di atas) */}
+  <div class="stage-float absolute top-[30%] left-[4%] hidden w-16 lg:block" style="animation-duration: 7s;">
+    <svg viewBox="-44 -51 88 114">
+      <polygon points={HEX} transform="translate(0,12)" fill="var(--color-garden-800)" opacity="0.85"></polygon>
+      <polygon points={HEX} fill="var(--color-garden-500)" opacity="0.95"></polygon>
+    </svg>
+  </div>
+  <div class="stage-float absolute top-[14%] right-[5%] hidden w-12 md:block" style="animation-duration: 8.5s; animation-delay: 1.2s;">
+    <svg viewBox="-44 -51 88 114">
+      <polygon points={HEX} transform="translate(0,10)" fill="var(--color-garden-700)" opacity="0.85"></polygon>
+      <polygon points={HEX} fill="var(--color-garden-300)" opacity="0.95"></polygon>
+    </svg>
+  </div>
+  <div class="stage-float absolute top-[8%] left-[15%] hidden w-9 md:block" style="animation-duration: 10s; animation-delay: 0.6s;">
+    <svg viewBox="-44 -51 88 114">
+      <polygon points={HEX} transform="translate(0,8)" fill="var(--color-garden-500)" opacity="0.55"></polygon>
+      <polygon points={HEX} fill="var(--color-garden-200)" opacity="0.9"></polygon>
+    </svg>
+  </div>
+</div>
