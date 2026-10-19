@@ -304,7 +304,7 @@ import logoKti from '../../assets/kebuntech.png';
       });
       if (activeTab === 'id') {
         hintEl.textContent = $('doc-id').value
-          ? 'Menyimpan bahasa Indonesia akan menerjemahkan ulang English & 日本語 (koreksi manual di tab lain akan tertimpa).'
+          ? 'Menyimpan hanya mengubah bahasa Indonesia — terjemahan EN/JA tidak disentuh.'
           : 'Konten sumber. Setelah disimpan, English & 日本語 dibuat otomatis via AWS Translate.';
       } else {
         hintEl.textContent = `Koreksi manual terjemahan ${TAB_LABEL[activeTab]} — menyimpan di tab ini TIDAK mengubah bahasa lain.`;
@@ -516,7 +516,7 @@ import logoKti from '../../assets/kebuntech.png';
           hasTranslation[activeTab] = true;
           showInfo(`Terjemahan ${TAB_LABEL[activeTab]} tersimpan.`);
         } else if (id) {
-          // Edit konten sumber → terjemahkan ulang
+          // Edit konten sumber — TIDAK menerjemahkan ulang (koreksi manual EN/JA dipertahankan)
           await updateDoc(doc(db!, 'news', id), {
             title: buffers.id.title.trim(),
             description: buffers.id.description.trim(),
@@ -524,7 +524,7 @@ import logoKti from '../../assets/kebuntech.png';
             updatedAt: serverTimestamp(),
           });
           await saveGlobals(id);
-          await runTranslation(id);
+          showInfo('Tersimpan (bahasa Indonesia). Terjemahan EN/JA tidak diubah — koreksi lewat tab bahasa bila perlu.');
         } else {
           // Artikel baru: slug unik dari judul Indonesia
           const published = ($('f-published') as HTMLInputElement).checked;

@@ -103,7 +103,7 @@
     @apply mt-10 mb-4 text-2xl font-bold text-garden-900;
   }
   .prose-basic h3 {
-    @apply mt-8 mb-3 text-xl font-bold text-ink-900;
+    @apply mt-8 mb-3 text-xl font-bold text-garden-900;
   }
   .prose-basic p {
     @apply mb-5 leading-relaxed text-ink-700;
@@ -120,6 +120,22 @@
   }
   .prose-basic strong {
     @apply text-ink-900;
+  }
+  /* strong di dalam heading mewarisi warna heading, jangan ditimpa ink-900 */
+  .prose-basic h2 strong,
+  .prose-basic h3 strong {
+    color: inherit;
+  }
+
+  /* Marker ol: mewarisi ukuran <li>, bukan heading di dalamnya — samakan agar tidak kecil */
+  .prose-basic ol li::marker {
+    @apply font-semibold text-garden-800;
+  }
+  .prose-basic ol li:has(> h2)::marker {
+    @apply text-2xl font-bold text-garden-900;
+  }
+  .prose-basic ol li:has(> h3)::marker {
+    @apply text-xl font-bold text-garden-900;
   }
 }
 

@@ -47,7 +47,7 @@ function buildHtml(f: {
 <div style="max-width:560px;margin:24px auto;background:#ffffff;border:1px solid #e5e2da;border-radius:12px;overflow:hidden">
   <div style="background:#05384a;padding:10px 10px 5px 10px">
         <div style="width:120px;height:auto;margin: 0 auto">
-          <img src="https://pmbihcxqtmeeexiqzskz.supabase.co/storage/v1/object/public/kebun-tech/kebuntech-alt.png" alt="PT Kebun Teknologi Indonesia" style="width:100%;height:auto;">
+          <img src="https://kebun.tech/logo.png" alt="PT Kebun Teknologi Indonesia" style="width:100%;height:auto;">
         </div>
       </div>
   <div style="padding:24px">
