@@ -5,12 +5,7 @@ import BridgeArc from '../../../components/BridgeArc.astro';
 import SectionHeading from '../../../components/SectionHeading.astro';
 import CTASection from '../../../components/CTASection.astro';
 import { getStaticLangPaths, type Lang } from '../../../i18n/ui';
-import imgFounder from '../../../assets/images/mardiansyah-mardis.webp';
-import imgLeaderIndra from '../../../assets/images/indra-kesuma.webp';
 import imgOffice from '../../../assets/images/office.webp';
-
-// Urutan foto mengikuti urutan t.founder.people di tiap bahasa
-const leaderPhotos = [imgFounder, imgLeaderIndra];
 
 export function getStaticPaths() {
   return getStaticLangPaths();
@@ -38,10 +33,6 @@ const t = {
     founder: {
       eyebrow: 'Greeting',
       title: 'ご挨拶',
-      people: [
-        { name: 'Dr. Mardiansyah Mardis', title: '創業者・名古屋大学 工学博士（化学工学）', alt: 'Dr. Mardiansyah Mardisのポートレート' },
-        { name: 'Indra Kesuma Nasution', title: 'コミサリス（監査役）', alt: 'Indra Kesuma Nasutionのポートレート' },
-      ],
       paragraphs: [
         'このたびは当社のウェブサイトにお越しいただき、誠にありがとうございます。',
         '「Kebun（クブン）」という社名は、インドネシア語で「畑・庭」を意味し、私たちが選んだのには理由があります。豊かな畑がそうであるように、一人ひとりは大きな可能性を秘めた「才能の種」です。丁寧に手をかけ、適切な教育という養分を与え、成長を支える環境に植えれば、世界で通用する優れた人材へと育つ——私たちはそう信じています。',
@@ -63,7 +54,7 @@ const t = {
         ['トレーニングセンター', 'ソロ（スコハルジョ）・ブカシ'],
         ['大学連携', 'ガジャマダ大学（UGM）／インドネシア大学（UI）／ボゴール農科大学（IPB）とMOU締結'],
         ['グループ会社', '株式会社ANCジャパン（愛知県名古屋市）'],
-        ['連絡先', 'business@kebun.tech'],
+        ['連絡先', 'business@kebun.tech · lpkkebun@gmail.com（LPK）'],
       ],
     },
     licenses: {
@@ -103,10 +94,6 @@ const t = {
     founder: {
       eyebrow: 'Kata Sambutan',
       title: 'Sambutan dari Kami',
-      people: [
-        { name: 'Dr. Mardiansyah Mardis', title: 'Founder · Doktor Teknik Kimia, Nagoya University', alt: 'Potret Dr. Mardiansyah Mardis' },
-        { name: 'Indra Kesuma Nasution', title: 'Komisaris', alt: 'Potret Indra Kesuma Nasution' },
-      ],
       paragraphs: [
         'Merupakan sebuah kebanggaan bagi kami untuk menyambut Anda di rumah digital kami.',
         'Nama "Kebun" kami pilih bukan tanpa alasan. Layaknya sebuah kebun yang subur, kami percaya bahwa setiap individu adalah bibit talenta yang memiliki potensi luar biasa. Jika dirawat, diberi nutrisi pendidikan yang tepat, dan ditempatkan di ekosistem yang mendukung, mereka akan tumbuh menjadi SDM yang unggul dan berdaya saing global.',
@@ -128,7 +115,7 @@ const t = {
         ['Training center', 'Solo (Sukoharjo) & Bekasi'],
         ['Kerja sama universitas', 'MOU dengan UGM, UI, dan IPB'],
         ['Grup perusahaan', 'ANC Japan Co., Ltd. (Nagoya, Jepang)'],
-        ['Kontak', 'business@kebun.tech · WhatsApp +62 819 0335 3533'],
+        ['Kontak', 'business@kebun.tech · lpkkebun@gmail.com (LPK) · WhatsApp +62 819 0335 3533'],
       ],
     },
     licenses: {
@@ -168,10 +155,6 @@ const t = {
     founder: {
       eyebrow: 'Greeting',
       title: 'A Word of Welcome',
-      people: [
-        { name: 'Dr. Mardiansyah Mardis', title: 'Founder · PhD in Chemical Engineering, Nagoya University', alt: 'Portrait of Dr. Mardiansyah Mardis' },
-        { name: 'Indra Kesuma Nasution', title: 'Commissioner', alt: 'Portrait of Indra Kesuma Nasution' },
-      ],
       paragraphs: [
         'It is our great pleasure to welcome you to our digital home.',
         'We chose the name "Kebun" — Indonesian for garden — deliberately. Like a fertile garden, we believe every individual is a seed of talent with extraordinary potential: nurtured with care, fed with the right education, and planted in a supportive ecosystem, they grow into globally competitive professionals.',
@@ -193,7 +176,7 @@ const t = {
         ['Training centers', 'Solo (Sukoharjo) & Bekasi'],
         ['University partners', 'MOUs with UGM, UI and IPB'],
         ['Group company', 'ANC Japan Co., Ltd. (Nagoya, Japan)'],
-        ['Contact', 'business@kebun.tech'],
+        ['Contact', 'business@kebun.tech · lpkkebun@gmail.com (LPK)'],
       ],
     },
     licenses: {
@@ -266,27 +249,11 @@ const localBusinessJsonLd = {
   {/* ===== Pesan Founder ===== */}
   <section class="bg-garden-50">
     <div class="container-site py-14 lg:py-18">
-      <div class="grid items-start gap-10 lg:grid-cols-[320px_1fr]">
-        <div class="mx-auto grid w-full max-w-xs gap-8 sm:max-w-2xl sm:grid-cols-2 lg:max-w-xs lg:grid-cols-1">
-          {/* FOTO: potret profesional Dr. Mardiansyah Mardis & Indra Kesuma Nasution */}
-          {
-            t.founder.people.map((person, i) => (
-              <figure>
-                <Image src={leaderPhotos[i]} alt={person.alt} class="w-full rounded-2xl border border-washi-200 object-cover" />
-                <figcaption class="mt-4 text-center">
-                  <p class="font-bold text-garden-900">{person.name}</p>
-                  <p class="mt-1 text-xs text-ink-600">{person.title}</p>
-                </figcaption>
-              </figure>
-            ))
-          }
-        </div>
-        <div>
-          <p class="eyebrow">{t.founder.eyebrow}</p>
-          <h2 class="mt-2 text-2xl font-bold text-garden-900 sm:text-3xl">{t.founder.title}</h2>
-          <div class="mt-6 space-y-5">
-            {t.founder.paragraphs.map((p) => <p class="leading-relaxed text-ink-700">{p}</p>)}
-          </div>
+      <div class="mx-auto max-w-3xl">
+        <p class="eyebrow">{t.founder.eyebrow}</p>
+        <h2 class="mt-2 text-2xl font-bold text-garden-900 sm:text-3xl">{t.founder.title}</h2>
+        <div class="mt-6 space-y-5">
+          {t.founder.paragraphs.map((p) => <p class="leading-relaxed text-ink-700">{p}</p>)}
         </div>
       </div>
     </div>
