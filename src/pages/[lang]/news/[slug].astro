@@ -26,8 +26,18 @@ const articleJsonLd = {
   description: post.description,
   datePublished: post.publishedAt.toISOString(),
   inLanguage: lang,
-  author: { '@type': 'Organization', name: 'PT Kebun Teknologi Indonesia' },
-  publisher: { '@type': 'Organization', name: 'PT Kebun Teknologi Indonesia', url: 'https://kebun.tech' },
+  author: { '@type': 'Organization', name: 'PT Kebun Teknologi Indonesia', url: 'https://kebun.tech' },
+  publisher: {
+    '@type': 'Organization',
+    name: 'PT Kebun Teknologi Indonesia',
+    url: 'https://kebun.tech',
+    logo: {
+      '@type': 'ImageObject',
+      url: 'https://kebun.tech/apple-touch-icon.png',
+      width: 180,
+      height: 180,
+    },
+  },
 };
 
 // BreadcrumbList valid (schema.org) — menggantikan sinyal data-vocabulary.org dari WordPress lama
