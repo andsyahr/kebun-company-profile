@@ -1,25 +1,18 @@
 ---
-// Root "/" → redirect berdasarkan bahasa browser, default /ja/
----
+// Root "/" → redirect server-side (302) berdasarkan Accept-Language, default /ja/ (= x-default).
+// SSR: prerender = false agar bisa membaca header request; tidak ada HTML → tidak ada noindex.
+export const prerender = false;
 
-<!doctype html>
-<html lang="ja">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PT Kebun Teknologi Indonesia</title>
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <meta name="robots" content="noindex" />
-    <script is:inline>
-      var l = ((navigator.languages && navigator.languages[0]) || navigator.language || 'ja').toLowerCase();
-      var target = l.indexOf('id') === 0 ? '/id/' : l.indexOf('en') === 0 ? '/en/' : '/ja/';
-      location.replace(target);
-    </script>
-    <noscript><meta http-equiv="refresh" content="0;url=/ja/" /></noscript>
-  </head>
-  <body style="font-family: system-ui; padding: 2rem; text-align: center;">
-    <p>
-      <a href="/ja/">日本語</a> · <a href="/id/">Bahasa Indonesia</a> · <a href="/en/">English</a>
-    </p>
-  </body>
-</html>
+const accept = Astro.request.headers.get('accept-language') ?? '';
+const first = accept.split(',')[0]?.trim().toLowerCase() ?? '';
+const lang = first.startsWith('id') ? 'id' : first.startsWith('en') ? 'en' : 'ja';
+
+return new Response(null, {
+  status: 302,
+  headers: {
+    Location: `/${lang}/`,
+    Vary: 'Accept-Language',
+    'Cache-Control': 'no-store',
+  },
+});
+---
