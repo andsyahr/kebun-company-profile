@@ -12,8 +12,8 @@ export default defineConfig({
   adapter: node({ mode: 'standalone' }),
   integrations: [
     sitemap({
-      // Admin tidak untuk mesin pencari
-      filter: (page) => !page.includes('/admin'),
+      // Root "/" (redirect 302 per bahasa, bukan konten) dan /admin tidak untuk mesin pencari
+      filter: (page) => page !== 'https://kebun.tech/' && !page.includes('/admin'),
       // Halaman indeks berita SSR → tidak terdeteksi otomatis, daftar manual.
       // Artikel individual ada di /sitemap-news.xml (dibuat dinamis dari Firestore).
       customPages: [
