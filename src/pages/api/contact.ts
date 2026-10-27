@@ -13,14 +13,21 @@ const LIMITS: Record<string, number> = {
 }
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
+// Secret runtime via process.env (import.meta.env statis-inline saat build → kosong di prod)
+const AUTH_EMAIL = import.meta.env.AUTH_EMAIL ?? process.env.AUTH_EMAIL;
+const AUTH_CLIENT_ID = import.meta.env.AUTH_CLIENT_ID ?? process.env.AUTH_CLIENT_ID;
+const AUTH_CLIENT_SECRET = import.meta.env.AUTH_CLIENT_SECRET ?? process.env.AUTH_CLIENT_SECRET;
+const AUTH_REFRESH_TOKEN = import.meta.env.AUTH_REFRESH_TOKEN ?? process.env.AUTH_REFRESH_TOKEN;
+const CONTACT_TO = import.meta.env.CONTACT_TO ?? process.env.CONTACT_TO;
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
     type: 'OAuth2',
-    user: import.meta.env.AUTH_EMAIL,
-    clientId: import.meta.env.AUTH_CLIENT_ID,
-    clientSecret: import.meta.env.AUTH_CLIENT_SECRET,
-    refreshToken: import.meta.env.AUTH_REFRESH_TOKEN
+    user: AUTH_EMAIL,
+    clientId: AUTH_CLIENT_ID,
+    clientSecret: AUTH_CLIENT_SECRET,
+    refreshToken: AUTH_REFRESH_TOKEN
   }
 })
 
@@ -104,8 +111,8 @@ export const POST: APIRoute = async ({ request }) => {
 
   try {
     await transporter.sendMail({
-      from: `Website kebun.tech <${import.meta.env.AUTH_EMAIL}>`,
-      to: import.meta.env.CONTACT_TO,
+      from: `Website kebun.tech <${AUTH_EMAIL}>`,
+      to: CONTACT_TO,
       replyTo: email,
       subject: `[Contact] ${category} — ${name}`,
       html: buildHtml({ category, name, company, email, phone, message }),

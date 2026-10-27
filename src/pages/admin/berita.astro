@@ -126,6 +126,9 @@ import logoKti from '../../assets/kebuntech.png';
       <button type="submit" id="save-btn" class="w-full rounded-lg bg-garden-900 px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-garden-800 disabled:opacity-50">
         Simpan
       </button>
+      <button type="button" id="btn-translate" class="hidden w-full rounded-lg border border-garden-900 px-4 py-2.5 text-sm font-bold text-garden-900 transition-colors hover:bg-garden-50 disabled:opacity-50">
+        Terjemahkan ulang (EN & 日本語)
+      </button>
     </form>
   </dialog>
 
@@ -209,6 +212,7 @@ import logoKti from '../../assets/kebuntech.png';
     const errorEl = document.getElementById('form-error')!;
     const infoEl = document.getElementById('form-info')!;
     const saveBtn = document.getElementById('save-btn') as HTMLButtonElement;
+    const translateBtn = document.getElementById('btn-translate') as HTMLButtonElement;
     const hintEl = document.getElementById('tab-hint')!;
     const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
 
@@ -311,6 +315,8 @@ import logoKti from '../../assets/kebuntech.png';
       }
       hintEl.classList.remove('hidden');
       saveBtn.textContent = `Simpan (${TAB_LABEL[activeTab]})`;
+      // Tombol translate manual: hanya di tab sumber (id) dan artikel sudah tersimpan
+      translateBtn.classList.toggle('hidden', activeTab !== 'id' || !$('doc-id').value);
     }
     tabBtns.forEach((b) =>
       b.addEventListener('click', () => {
@@ -573,7 +579,7 @@ import logoKti from '../../assets/kebuntech.png';
         });
         const data = await res.json();
         if (!res.ok) {
-          showError(`Konten Indonesia tersimpan, tapi terjemahan otomatis gagal (${data.error ?? res.status}). Isi tab EN/JA manual atau coba simpan ulang.`);
+          showError(`Terjemahan otomatis gagal (${data.error ?? res.status}). Coba tombol "Terjemahkan ulang", atau isi tab EN/JA manual.`);
           return;
         }
         buffers.en = data.translations.en;
@@ -582,9 +588,37 @@ import logoKti from '../../assets/kebuntech.png';
         showInfo('Tersimpan + terjemahan EN/JA dibuat. Koreksi manual lewat tab bahasa bila perlu.');
       } catch (err) {
         console.error(err);
-        showError('Konten Indonesia tersimpan, tapi permintaan terjemahan gagal. Coba simpan ulang.');
+        showError('Konten Indonesia tersimpan, tapi permintaan terjemahan gagal. Coba tombol "Terjemahkan ulang" atau isi tab EN/JA manual.');
       }
     }
+
+    // ---------- Terjemahkan ulang (manual) ----------
+    // Simpan ulang sumber ID dulu, lalu panggil endpoint AWS Translate → menimpa EN/JA yang ada.
+    translateBtn.addEventListener('click', async () => {
+      const id = $('doc-id').value;
+      if (!id || activeTab !== 'id') return;
+      if (hasTranslation.en || hasTranslation.ja) {
+        if (!confirm('Terjemahan EN/JA yang ada akan DIGANTI dengan hasil translate baru. Lanjutkan?')) return;
+      }
+      readFormInto('id');
+      translateBtn.disabled = true;
+      try {
+        await updateDoc(doc(db!, 'news', id), {
+          title: buffers.id.title.trim(),
+          description: buffers.id.description.trim(),
+          body: buffers.id.body.trim(),
+          updatedAt: serverTimestamp(),
+        });
+        await saveGlobals(id);
+        await runTranslation(id);
+        await loadList();
+      } catch (err: any) {
+        console.error(err);
+        showError(`Gagal menerjemahkan: ${err?.code ?? err?.message ?? err}`);
+      } finally {
+        translateBtn.disabled = false;
+      }
+    });
 
     refreshTabs();
   </script>

@@ -7,13 +7,17 @@ export const prerender = false;
 const json = (status: number, data: Record<string, unknown>) =>
   new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
 
-const awsReady = Boolean(import.meta.env.AWS_ACCESS_KEY_ID && import.meta.env.AWS_SECRET_ACCESS_KEY && import.meta.env.AWS_REGION);
+// Secret runtime via process.env (import.meta.env statis-inline saat build → kosong di prod)
+const AWS_ACCESS_KEY_ID = import.meta.env.AWS_ACCESS_KEY_ID ?? process.env.AWS_ACCESS_KEY_ID;
+const AWS_SECRET_ACCESS_KEY = import.meta.env.AWS_SECRET_ACCESS_KEY ?? process.env.AWS_SECRET_ACCESS_KEY;
+const AWS_REGION = import.meta.env.AWS_REGION ?? process.env.AWS_REGION;
+const awsReady = Boolean(AWS_ACCESS_KEY_ID && AWS_SECRET_ACCESS_KEY && AWS_REGION);
 const client = awsReady
   ? new TranslateClient({
-      region: import.meta.env.AWS_REGION,
+      region: AWS_REGION!,
       credentials: {
-        accessKeyId: import.meta.env.AWS_ACCESS_KEY_ID!,
-        secretAccessKey: import.meta.env.AWS_SECRET_ACCESS_KEY!,
+        accessKeyId: AWS_ACCESS_KEY_ID!,
+        secretAccessKey: AWS_SECRET_ACCESS_KEY!,
       },
     })
   : undefined;
