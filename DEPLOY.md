@@ -95,7 +95,7 @@ Berita dikelola via halaman admin dan disimpan di **Cloud Firestore**:
 2. **Buat user admin** di Authentication → Users → Add user (email + password kuat). Hanya user ini yang bisa login ke halaman admin.
 3. **Pasang security rules** — isi `firestore.rules` di repo ini disalin ke Firestore → Rules → Publish. Publik hanya bisa baca artikel `published: true`; tulis butuh login.
 4. **Ambil web config** (Project settings → Your apps → Web app): `apiKey`, `authDomain`, `projectId`, `appId` → isi ke env `PUBLIC_FIREBASE_API_KEY`, `PUBLIC_FIREBASE_AUTH_DOMAIN`, `PUBLIC_FIREBASE_PROJECT_ID`, `PUBLIC_FIREBASE_APP_ID` (lokal di `.env`; di CI/CD jadi GitHub Secrets karena ter-inline saat build). Config ini memang publik by design — keamanan ada di rules + Auth, bukan kerahasiaan config.
-5. **Halaman admin**: `/admin/login` → `/admin/berita`. Artikel ditulis dalam **bahasa Indonesia** (sumber); English & 日本語 dibuat otomatis via **AWS Translate** **hanya saat artikel pertama dibuat**. Edit berikutnya pada bahasa Indonesia tidak menerjemahkan ulang — koreksi manual di tab EN/JA selalu dipertahankan. Semua artikel terbit tampil di ketiga versi bahasa situs.
+5. **Halaman admin**: `/admin/berita`. Artikel ditulis dalam **bahasa Indonesia** (sumber); English & 日本語 dibuat otomatis via **AWS Translate** **hanya saat artikel pertama dibuat**. Edit berikutnya pada bahasa Indonesia tidak menerjemahkan ulang — tombol **"Terjemahkan ulang (EN & 日本語)"** di form menimpa EN/JA secara manual (ada konfirmasi, karena koreksi manual akan diganti). Semua artikel terbit tampil di ketiga versi bahasa situs.
 
 **Terjemahan otomatis (AWS Translate)** — endpoint `/api/translate-news` (server-only, butuh env runtime):
 
