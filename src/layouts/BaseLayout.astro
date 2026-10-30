@@ -83,7 +83,17 @@ const organizationJsonLd = {
   },
 };
 
-const jsonLdBlocks = [organizationJsonLd, ...extraJsonLd];
+// JSON-LD WebSite — sinyal site name untuk Google (fitur "site name" di hasil pencarian).
+// Name konsisten di semua bahasa (= t.siteName) agar Google tidak fallback ke domain.
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: t.siteName,
+  alternateName: 'Kebun Technology',
+  url: site,
+};
+
+const jsonLdBlocks = [organizationJsonLd, websiteJsonLd, ...extraJsonLd];
 ---
 
 <!doctype html>
