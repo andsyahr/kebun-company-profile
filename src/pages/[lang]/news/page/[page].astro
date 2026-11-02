@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import NewsArchive from '../../../../components/NewsArchive.astro';
+import { isLang, type Lang } from '../../../../i18n/ui';
+import { NEWS_PAGE_SIZE, newsArchiveT } from '../../../../i18n/newsArchive';
+import { listPublishedNews } from '../../../../lib/news';
+
+export const prerender = false;
+
+const langParam = Astro.params.lang;
+if (!isLang(langParam)) return Astro.redirect('/id/news/');
+const lang = langParam as Lang;
+const t = newsArchiveT[lang];
+
+const raw = Astro.params.page ?? '';
+if (!/^\d+$/.test(raw)) return Astro.redirect(`/${lang}/news/`, 301);
+const page = Number(raw);
+if (page === 1) return Astro.redirect(`/${lang}/news/`, 301);
+
+const posts = await listPublishedNews(lang);
+const totalPages = Math.max(1, Math.ceil(posts.length / NEWS_PAGE_SIZE));
+
+// Halaman di luar rentang → halaman terakhir (hindari halaman kosong)
+if (page > totalPages) {
+  return Astro.redirect(
+    totalPages === 1 ? `/${lang}/news/` : `/${lang}/news/page/${totalPages}/`,
+    302
+  );
+}
+---
+
+<BaseLayout
+  lang={lang}
+  title={t.pager.titleSuffix(page)}
+  description={t.meta.description}
+  path={`/news/page/${page}/`}
+>
+  <NewsArchive lang={lang} posts={posts} page={page} t={t} />
+</BaseLayout>
