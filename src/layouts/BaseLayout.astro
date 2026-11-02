@@ -84,16 +84,20 @@ const organizationJsonLd = {
 };
 
 // JSON-LD WebSite — sinyal site name untuk Google (fitur "site name" di hasil pencarian).
-// Name konsisten di semua bahasa (= t.siteName) agar Google tidak fallback ke domain.
+// Hanya di beranda bahasa (path === '/'), sesuai anjuran Google: cukup di home page.
 const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: t.siteName,
-  alternateName: 'Kebun Technology',
-  url: site,
+  name: 'Kebun Technology',
+  alternateName: 'PT Kebun Teknologi Indonesia',
+  url: `${site}/`,
 };
 
-const jsonLdBlocks = [organizationJsonLd, websiteJsonLd, ...extraJsonLd];
+const jsonLdBlocks = [
+  organizationJsonLd,
+  ...(path === '/' ? [websiteJsonLd] : []),
+  ...extraJsonLd,
+];
 ---
 
 <!doctype html>
@@ -115,7 +119,7 @@ const jsonLdBlocks = [organizationJsonLd, websiteJsonLd, ...extraJsonLd];
     {/* Open Graph */}
     <meta property="og:type" content={ogType} />
     {publishedTime && <meta property="article:published_time" content={publishedTime} />}
-    <meta property="og:site_name" content={t.siteName} />
+    <meta property="og:site_name" content="Kebun Technology" />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
