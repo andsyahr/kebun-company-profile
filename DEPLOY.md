@@ -136,4 +136,6 @@ Konten per halaman ada di `src/pages/[lang]/**/index.astro` (objek `t` berisi te
 
 ## SEO yang sudah terpasang (tidak perlu diubah)
 
-Meta title/description per bahasa, canonical, hreflang (ja/id/en + x-default), Open Graph + `og-image.png`, `sitemap-index.xml` + `sitemap-news.xml` (artikel dinamis, dirujuk `robots.txt`), JSON-LD Organization/EmploymentAgency/Article. Setelah live, daftarkan `https://kebun.tech/sitemap-index.xml` di Google Search Console.
+Meta title/description per bahasa, canonical, hreflang (ja/id/en + x-default), Open Graph + `og-image.png`, `sitemap-index.xml` + `sitemap-news.xml` (artikel dinamis, dirujuk `robots.txt`), JSON-LD Organization/WebSite/EmploymentAgency/Article. `WebSite` (site name "Kebun Technology") hanya dipasang di beranda bahasa, sesuai anjuran Google. Setelah live, daftarkan `https://kebun.tech/sitemap-index.xml` di Google Search Console.
+
+**Pagination arsip berita**: `/{lang}/news/page/N/` (path-based, SSR). Halaman 1 = `/{lang}/news/`; URL lama `?page=N` di-redirect 301 ke path kanonik. Jumlah artikel per halaman diatur lewat `NEWS_PAGE_SIZE` di `src/i18n/newsArchive.ts` (default 4). Halaman 2+ memakai self-canonical dan tidak masuk sitemap — Google menemukannya lewat link pager.
